@@ -10,30 +10,60 @@ import {
 import RecipeDetails from "./RecipeDetails";
 import PutRecipe from "../firebase/putRecipe.js";
 
+/**
+ * Functional component representing a meal card.
+ *
+ * @component
+ * @param {Object} props - React component properties.
+ * @param {Object} props.meal - The meal object to display on the card.
+ */
 const MealCard = ({ meal }) => {
+  /**
+   * State hook to manage the visibility of recipe details modal.
+   * @type {[boolean, Function]}
+   */
   const [showDetails, setShowDetails] = useState(false);
+
+  /**
+   * Toggles the visibility of recipe details modal.
+   */
   const toggle = () => {
     setShowDetails(!showDetails);
   };
 
+  /**
+   * Saves the meal recipe into the user's data and closes the modal.
+   */
   function saveData() {
     /*
         TODO: save recipe into user's data
         TODO: also refactor to remove showDetails and replace the toggle function
-        they are extra and we can achive the same functionality by checking if meal is null or not
-        */
+        they are extra and we can achieve the same functionality by checking if meal is null or not
+    */
     const savedMeal = meal;
     savedMeal.isSaved = true;
     PutRecipe("savedRecipes", savedMeal);
     toggle(); //close modal
   }
 
+  /**
+   * Style object for the card width.
+   * @type {Object}
+   */
   const width = { width: "18rem" };
 
+  /**
+   * Style object for the card border.
+   * @type {Object}
+   */
   const cardStyle = {
     border: "2px outset #FFA6A6",
   };
 
+  /**
+   * JSX for the buttons in the card.
+   * @type {JSX.Element}
+   */
   const buttonOptions = (
     <>
       <Button color="primary" onClick={saveData}>
@@ -45,6 +75,10 @@ const MealCard = ({ meal }) => {
     </>
   );
 
+  /**
+   * Renders the meal card component.
+   * @returns {JSX.Element} - JSX for the meal card.
+   */
   return (
     <Card
       className={"m-2 p-3 flex-fill shadow-sm"}

@@ -1,3 +1,15 @@
+/**
+ * SearchBox component for filtering options using checkboxes.
+ * @typedef {Object} SearchBoxProps
+ * @property {Function} setfilterOptions - A function to update filter options.
+ * @property {Object} filterOptions - The current filter options.
+ */
+
+/**
+ * Updates the filter option for a given key and triggers a re-render.
+ * @callback CheckBoxChecked
+ * @param {string} key - The keyfz of the filter option to update.
+ */
 import { Label, FormGroup, Form, Input } from "reactstrap";
 
 const SearchBox = ({ setfilterOptions, filterOptions }) => {

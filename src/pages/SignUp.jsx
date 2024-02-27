@@ -1,3 +1,8 @@
+/**
+ * React component for user registration (Sign Up).
+ * @module SignUp
+ */
+
 import React, { useState, useEffect } from "react";
 import {
   getAuth,
@@ -9,18 +14,55 @@ import { firestoreDb } from "../firebase/firebaseConfig.js";
 import "../css/LoginSignUp.css";
 import "./Home.jsx";
 
+/**
+ * Functional component representing the SignUp page.
+ * @returns {JSX.Element} SignUp component
+ */
 var SignUp = () => {
+  /**
+   * State for storing the user's name.
+   * @type {[string, function]}
+   */
   const [userName, isUserName] = useState("");
+
+  /**
+   * State for storing the user's email.
+   * @type {[string, function]}
+   */
   const [userEmail, isUserEmail] = useState("");
+
+  /**
+   * State for storing any signup error message.
+   * @type {[string, function]}
+   */
   const [signupError, isSignUpError] = useState("");
+
+  /**
+   * State for storing the user's password.
+   * @type {[string, function]}
+   */
   const [userPassword, isUserPassword] = useState("");
 
+  /**
+   * Firebase authentication instance.
+   * @type {Object}
+   */
   const auth = getAuth();
+
+  /**
+   * Side effect hook to update document title and body class.
+   */
   useEffect(() => {
     document.title = "CookBook-Pro: SignUp";
     document.body.classList.add("loginPage");
     document.body.style.backgroundColor = "#CFDEF3";
   }, []);
+
+  /**
+   * Handles form submission to create a new user account.
+   * @param {Event} e - The form submission event.
+   * @returns {Promise<void>} Promise that resolves after form submission.
+   */
   const inputCredentials = async (e) => {
     e.preventDefault();
     await createUserWithEmailAndPassword(auth, userEmail, userPassword)
@@ -38,6 +80,7 @@ var SignUp = () => {
         isSignUpError(errorMessage);
         console.log(errorCode, errorMessage);
       });
+
     await updateProfile(auth.currentUser, {
       displayName: document.getElementById("isName").value,
     })
@@ -52,6 +95,10 @@ var SignUp = () => {
       });
   };
 
+  /**
+   * Renders the SignUp component.
+   * @returns {JSX.Element} SignUp component
+   */
   return (
     <div className="SignUp">
       <h1 className="Title">Sign Up</h1>

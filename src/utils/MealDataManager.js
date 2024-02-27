@@ -5,7 +5,15 @@
 import { Recipe } from "../customObjects/Recipe.js";
 import { Ingredient } from "../customObjects/Ingredient.js";
 import PutRecipe from "../firebase/putRecipe.js";
+
+/**
+ * Class representing a manager for handling meal data from Spoonacular API and FirebaseDB.
+ */
 class MealDataManager {
+  /**
+   * Constructor for MealDataManager class.
+   * Initializes Spoonacular API URL and API key.
+   */
   constructor() {
     // https://spoonacular.com/food-api/console#Dashboard
     this.spoonacularURL = new URL("https://api.spoonacular.com/recipes");
@@ -13,42 +21,43 @@ class MealDataManager {
   }
 
   /**
+   * Query Spoonacular API for recipes based on the given search query and offset.
    *
-   * @param {String} query what was entered in the search bar (food)
-   * @param {Number} offset used for infinite scroll
-   * @returns
+   * @param {String} query - The search query entered in the search bar (food).
+   * @param {Number} offset - The offset used for infinite scroll.
+   * @returns {Promise<Object>} - A promise that resolves to an object containing search results list and total results count.
    */
   async queryRecipeFromSpoonacular(query, offset) {
     const searchQuery = new URLSearchParams();
     /*
-        addRecipeInformation	boolean	false	If set to true, you get more information about the recipes returned.
-        offset                number	0	    The number of results to skip (between 0 and 900).
-        number  	            number	10	    The number of expected results (between 1 and 100).
-        fillIngredients	      boolean	false	Add information about the ingredients and whether they are used or missing in relation to the query.
-        */
+      addRecipeInformation  boolean  false   If set to true, you get more information about the recipes returned.
+      offset                number   0       The number of results to skip (between 0 and 900).
+      number                number   10      The number of expected results (between 1 and 100).
+      fillIngredients       boolean  false   Add information about the ingredients and whether they are used or missing in relation to the query.
+    */
     searchQuery.append("apiKey", this.spoonacularApi);
-    searchQuery.append("query", query); // Assuming query is a string, adjust accordingly
+    searchQuery.append("query", query);
     searchQuery.append("addRecipeInformation", true);
-    searchQuery.append("offset", offset); //use this offset for infinite scrolling
-    searchQuery.append("number", 20); //ask for 100 recipes instead of 10
-    searchQuery.append("fillIngredients", true); //get ingredient info
+    searchQuery.append("offset", offset);
+    searchQuery.append("number", 20);
+    searchQuery.append("fillIngredients", true);
 
     const fullUrl = `${
       this.spoonacularURL
     }/complexSearch?${searchQuery.toString()}`;
 
     /*
-        using the search params from above we get these properities of a recipe
-        recipe keys=["vegetarian","vegan","glutenFree","dairyFree","veryHealthy","cheap","veryPopular","sustainable","lowFodmap","weightWatcherSmartPoints","gaps","preparationMinutes","cookingMinutes","aggregateLikes","healthScore","creditsText","sourceName","pricePerServing","extendedIngredients","id","title","readyInMinutes","servings","sourceUrl","image","imageType","summary","cuisines","dishTypes","diets","occasions","analyzedInstructions","spoonacularScore","spoonacularSourceUrl","usedIngredientCount","missedIngredientCount","missedIngredients","likes","usedIngredients","unusedIngredients"]
-        */
+      using the search params from above we get these properties of a recipe
+      recipe keys=["vegetarian","vegan","glutenFree","dairyFree","veryHealthy","cheap","veryPopular","sustainable","lowFodmap","weightWatcherSmartPoints","gaps","preparationMinutes","cookingMinutes","aggregateLikes","healthScore","creditsText","sourceName","pricePerServing","extendedIngredients","id","title","readyInMinutes","servings","sourceUrl","image","imageType","summary","cuisines","dishTypes","diets","occasions","analyzedInstructions","spoonacularScore","spoonacularSourceUrl","usedIngredientCount","missedIngredientCount","missedIngredients","likes","usedIngredients","unusedIngredients"]
+    */
 
     try {
       const response = await fetch(fullUrl);
-
       const data = await response.json();
       console.log(data);
+
       const searchResultsList = data.results.map((recipe) => {
-        // Parse each ingredient to fit out custom ingredient object
+        // Parse each ingredient to fit our custom ingredient object
         const mappedIngredients = recipe.extendedIngredients.map(
           (ingredient) => {
             const ing = new Ingredient(
@@ -78,7 +87,7 @@ class MealDataManager {
         return mappedResult;
       });
 
-      //i want the number of matching meals from spoonacular so infinite scroll knows when to stop
+      // Return the number of matching meals from Spoonacular for infinite scroll
       return {
         resultsList: searchResultsList,
         totalResults: data.totalResults,

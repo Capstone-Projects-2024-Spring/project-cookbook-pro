@@ -1,3 +1,10 @@
+/**
+ * Login component for user authentication.
+ * @module Login
+ * @exports Login
+ * @category Components
+ */
+
 import React, { useState, useEffect } from "react";
 import {
   getAuth,
@@ -11,18 +18,57 @@ import "../firebase/firebaseConfig.js";
 import "./Home";
 import "./SignUp";
 
-var Login = () => {
+/**
+ * Functional component representing the login page.
+ * @function Login
+ * @returns {JSX.Element} Login component JSX
+ */
+const Login = () => {
+  /**
+   * State for user email.
+   * @type {[string, function]}
+   */
   const [userEmail, isUserEmail] = useState("");
+
+  /**
+   * State for user password.
+   * @type {[string, function]}
+   */
   const [userPassword, isUserPassword] = useState("");
+
+  /**
+   * State for login error message.
+   * @type {[string, function]}
+   */
   const [loginError, isLoginError] = useState("");
+
+  /**
+   * Firebase authentication instance.
+   * @type {Object}
+   */
   const auth = getAuth();
 
+  /**
+   * Set document title and background color on component mount.
+   * @function
+   * @name useEffect
+   * @param {function} effect - Function to be executed on component mount.
+   * @param {Array} dependencies - Dependencies for the effect.
+   * @returns {void}
+   */
   useEffect(() => {
     document.title = "CookBook-Pro: Login";
     document.body.classList.add("loginPage");
     document.body.style.backgroundColor = "#E0EAFC";
   }, []);
 
+  /**
+   * Check user input and attempt to sign in with email and password.
+   * @async
+   * @function checkInput
+   * @param {Event} e - The event object.
+   * @returns {Promise<void>}
+   */
   const checkInput = async (e) => {
     e.preventDefault();
     try {
@@ -41,6 +87,12 @@ var Login = () => {
     }
   };
 
+  /**
+   * Sign in with Google using Firebase authentication.
+   * @async
+   * @function signInWithGoogle
+   * @returns {Promise<void>}
+   */
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     try {
@@ -56,6 +108,11 @@ var Login = () => {
     }
   };
 
+  /**
+   * Render the login component.
+   * @function
+   * @returns {JSX.Element} Login component JSX
+   */
   return (
     <div className="LogIn">
       <h1 className="Title">Log In</h1>

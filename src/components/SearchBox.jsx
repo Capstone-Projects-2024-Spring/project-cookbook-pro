@@ -17,23 +17,34 @@ import SearchBoxFilter from "./SearchBoxFilter";
 const mealDataManager = new MealDataManager();
 
 /**
- *
- * @param {function} param0
- * @param {function} param1
- * @returns
+ * React component for a search box with filters.
+ * @component
+ * @param {Object} props - React component props.
+ * @param {function} props.onSearch - Callback function triggered on search.
+ * @param {string} props.query - Current search query.
+ * @param {function} props.setQuery - Function to set the search query.
+ * @returns {JSX.Element} SearchBox component.
  */
 const SearchBox = ({ onSearch, query, setQuery }) => {
-  //state varibles
+  // State variables
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  //state functions
+  /**
+   * Toggles the dropdown menu's visibility.
+   * @function
+   */
   const toggle = () => setDropdownOpen((prevState) => !prevState);
 
+  /**
+   * Handles input change in the search box.
+   * @function
+   * @param {Object} e - Input change event.
+   */
   const handleInputChange = (e) => {
     setQuery(e.target.value);
   };
 
-  // true/false search parameters, we can add as many as we want
+  // True/false search parameters, we can add as many as we want.
   // https://spoonacular.com/food-api/docs#Diets
   const [dietFilterOptions, setDietFilterOptions] = useState({
     Vegan: false,
@@ -77,9 +88,14 @@ const SearchBox = ({ onSearch, query, setQuery }) => {
     Drink: false,
   });
 
+  /**
+   * Handles the search functionality.
+   * @async
+   * @function
+   */
   const handleSearch = async () => {
     try {
-      // clear search results
+      // Clear search results
       onSearch("yayspin! :D this string doesn't mean anything");
 
       // Wait for the query to complete and get the results
@@ -108,7 +124,7 @@ const SearchBox = ({ onSearch, query, setQuery }) => {
                 />
               </Col>
               <Col>
-                <h6>Allergys</h6>
+                <h6>Allergies</h6>
                 <SearchBoxFilter
                   setfilterOptions={setIntoleranceFilterOptions}
                   filterOptions={intoleranceFilterOptions}

@@ -10,30 +10,69 @@ import {
 import RecipeDetails from "./RecipeDetails";
 import deleteRecipe from "../firebase/deleteRecipe.js";
 
-const savedMeals = () => {
+/**
+ * React component for displaying saved meals.
+ * @component
+ * @returns {JSX.Element} JSX element representing the saved meals component.
+ */
+const SavedMeals = () => {
+  /**
+   * State for storing the saved recipes.
+   * @type {Array.<string>}
+   */
   const [savedRecipes, setSavedRecipes] = useState([""]);
+
+  /**
+   * State for managing the visibility of recipe details modal.
+   * @type {boolean}
+   */
   const [showDetails, setShowDetails] = useState(false);
+
+  /**
+   * State for storing the currently selected meal for details display.
+   * @type {Object|undefined}
+   */
   const [meal, setMeal] = useState();
 
+  /**
+   * Toggles the visibility of the recipe details modal.
+   * @param {Object} recipe - The selected recipe.
+   */
   const toggle = (recipe) => {
     setMeal(recipe);
     setShowDetails(!showDetails);
   };
 
-  //important to only get 1 listener, so use this thingy
+  /**
+   * Effect hook to set up a listener for saved recipes when the component mounts.
+   */
   useEffect(() => {
-    const unsubscibe = getListener("savedRecipes", setSavedRecipes);
+    /**
+     * Function to unsubscribe from the saved recipes listener.
+     * @function
+     */
+    const unsubscribe = getListener("savedRecipes", setSavedRecipes);
+
+    // Cleanup function
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
+  /**
+   * Removes the saved recipe and closes the modal.
+   */
   function unsaveRecipe() {
     meal.isSaved = false;
-    //close the modal and remove the recipe
+    // Close the modal and remove the recipe
     toggle();
     deleteRecipe("savedRecipes", String(meal.id));
   }
 
-  let recipeDetails;
-
+  /**
+   * JSX element representing the buttons for recipe actions.
+   * @type {JSX.Element}
+   */
   const buttonOptions = (
     <>
       <Button color="primary" onClick={unsaveRecipe}>
@@ -44,6 +83,12 @@ const savedMeals = () => {
       </Button>
     </>
   );
+
+  /**
+   * JSX element representing the recipe details component.
+   * @type {JSX.Element|undefined}
+   */
+  let recipeDetails;
 
   if (showDetails) {
     recipeDetails = (
@@ -56,6 +101,10 @@ const savedMeals = () => {
     );
   }
 
+  /**
+   * JSX element representing the list of saved recipes.
+   * @type {JSX.Element}
+   */
   return (
     <ListGroup>
       <ListGroupItemHeading>My Recipes</ListGroupItemHeading>
@@ -71,4 +120,4 @@ const savedMeals = () => {
   );
 };
 
-export default savedMeals;
+export default SavedMeals;

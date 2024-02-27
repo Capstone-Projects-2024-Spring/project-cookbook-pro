@@ -11,14 +11,46 @@ import {
 import deleteRecipe from "../firebase/deleteRecipe";
 import { Ingredient } from "../customObjects/Ingredient.js";
 
+/**
+ * React component representing the Quick Order functionality.
+ * @component
+ */
 const quickOrder = () => {
+  /**
+   * State hook for storing the list of saved recipes.
+   * @type {Array}
+   */
   const [savedRecipes, setSavedRecipes] = useState([""]);
+
+  /**
+   * State hook for controlling the display of recipe details.
+   * @type {boolean}
+   */
   const [showDetails, setShowDetails] = useState(false);
+
+  /**
+   * State hook for storing the selected meal.
+   * @type {Object}
+   */
   const [meal, setMeal] = useState();
+
+  /**
+   * State hook for storing the user's email.
+   * @type {string}
+   */
   const [email, setEmail] = useState("");
 
+  /**
+   * Subject for the email.
+   * @type {string}
+   */
   const subject = "Your CookBook Pro shopping list";
 
+  /**
+   * Function to generate a mailto link for the email button.
+   * @function
+   * @returns {string} - Mailto link.
+   */
   const mailLinkGenerator = () => {
     let body = "";
     if (savedRecipes != "") {
@@ -60,21 +92,46 @@ const quickOrder = () => {
     );
   };
 
+  /**
+   * Event handler for input change in the email input field.
+   * @function
+   * @param {Object} e - Event object.
+   */
   const handleInputChange = (e) => {
     setEmail(e.target.value);
   };
 
+  /**
+   * Toggle function to show/hide recipe details.
+   * @function
+   * @param {Object} recipe - Selected recipe.
+   */
   const toggle = (recipe) => {
     setMeal(recipe);
     setShowDetails(!showDetails);
   };
 
-  //important to only get 1 listener, so use this thingy
+  /**
+   * useEffect hook to fetch the listener when the component mounts.
+   */
   useEffect(() => {
+    /**
+     * Function to unsubscribe from the listener.
+     * @type {Function}
+     */
     const unsubscibe = getListener("quickOrder", setSavedRecipes);
   }, []);
 
+  /**
+   * Variable to store button options for the recipe details.
+   * @type {JSX.Element}
+   */
   let recipeDetails;
+
+  /**
+   * Button options JSX for removing a recipe from order.
+   * @type {JSX.Element}
+   */
   const buttonOptions = (
     <Button
       onClick={() => {
@@ -86,6 +143,10 @@ const quickOrder = () => {
     </Button>
   );
 
+  /**
+   * Conditionally render RecipeDetails component if showDetails is true.
+   * @type {JSX.Element|null}
+   */
   if (showDetails) {
     recipeDetails = (
       <RecipeDetails
@@ -97,6 +158,10 @@ const quickOrder = () => {
     );
   }
 
+  /**
+   * Render the Quick Order component.
+   * @returns {JSX.Element} - Quick Order component JSX.
+   */
   return (
     <>
       {recipeDetails}
