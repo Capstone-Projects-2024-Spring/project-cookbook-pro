@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/SavedMeals.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/SavedMeals.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from "react";
+import getListener from "../firebase/setListener.js";
+import {
+  ListGroup,
+  ListGroupItem,
+  ListGroupItemHeading,
+  Button,
+} from "reactstrap";
+
+import RecipeDetails from "./RecipeDetails";
+import deleteRecipe from "../firebase/deleteRecipe.js";
+
+/**
+ * React component for displaying saved meals.
+ * @component
+ * @returns {JSX.Element} JSX element representing the saved meals component.
+ */
+const SavedMeals = () => {
+  /**
+   * State for storing the saved recipes.
+   * @type {Array.&lt;string>}
+   */
+  const [savedRecipes, setSavedRecipes] = useState([""]);
+
+  /**
+   * State for managing the visibility of recipe details modal.
+   * @type {boolean}
+   */
+  const [showDetails, setShowDetails] = useState(false);
+
+  /**
+   * State for storing the currently selected meal for details display.
+   * @type {Object|undefined}
+   */
+  const [meal, setMeal] = useState();
+
+  /**
+   * Toggles the visibility of the recipe details modal.
+   * @param {Object} recipe - The selected recipe.
+   */
+  const toggle = (recipe) => {
+    setMeal(recipe);
+    setShowDetails(!showDetails);
+  };
+
+  /**
+   * Effect hook to set up a listener for saved recipes when the component mounts.
+   */
+  useEffect(() => {
+    /**
+     * Function to unsubscribe from the saved recipes listener.
+     * @function
+     */
+    const unsubscribe = getListener("savedRecipes", setSavedRecipes);
+
+    // Cleanup function
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  /**
+   * Removes the saved recipe and closes the modal.
+   */
+  function unsaveRecipe() {
+    meal.isSaved = false;
+    // Close the modal and remove the recipe
+    toggle();
+    deleteRecipe("savedRecipes", String(meal.id));
+  }
+
+  /**
+   * JSX element representing the buttons for recipe actions.
+   * @type {JSX.Element}
+   */
+  const buttonOptions = (
+    &lt;>
+      &lt;Button color="primary" onClick={unsaveRecipe}>
+        Unsave recipe
+      &lt;/Button>
+      &lt;Button color="secondary" onClick={toggle}>
+        Cancel
+      &lt;/Button>
+    &lt;/>
+  );
+
+  /**
+   * JSX element representing the recipe details component.
+   * @type {JSX.Element|undefined}
+   */
+  let recipeDetails;
+
+  if (showDetails) {
+    recipeDetails = (
+      &lt;RecipeDetails
+        meal={meal}
+        showDetails={showDetails}
+        toggle={toggle}
+        buttonOptions={buttonOptions}
+      />
+    );
+  }
+
+  /**
+   * JSX element representing the list of saved recipes.
+   * @type {JSX.Element}
+   */
+  return (
+    &lt;ListGroup>
+      &lt;ListGroupItemHeading>My Recipes&lt;/ListGroupItemHeading>
+      {recipeDetails}
+      {savedRecipes.map((recipe, key) => {
+        return (
+          &lt;ListGroupItem action onClick={() => toggle(recipe)} key={key}>
+            {recipe.name}
+          &lt;/ListGroupItem>
+        );
+      })}
+    &lt;/ListGroup>
+  );
+};
+
+export default SavedMeals;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-FirebaseConverter.html">FirebaseConverter</a></li><li><a href="module-Header.html">Header</a></li><li><a href="module-Login.html">Login</a></li><li><a href="module-PrivateRoutes.html">PrivateRoutes</a></li><li><a href="module-SearchPage.html">SearchPage</a></li><li><a href="module-SignUp.html">SignUp</a></li></ul><h3>Classes</h3><ul><li><a href="MealDataManager.html">MealDataManager</a></li><li><a href="module-FirebaseConverter-FirebaseConverter.html">FirebaseConverter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AuthContext">AuthContext</a></li><li><a href="global.html#AuthProvider">AuthProvider</a></li><li><a href="global.html#GetRecipes">GetRecipes</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#MealCard">MealCard</a></li><li><a href="global.html#PutRecipe">PutRecipe</a></li><li><a href="global.html#RecipeDetails">RecipeDetails</a></li><li><a href="global.html#SavedMeals">SavedMeals</a></li><li><a href="global.html#SearchBox">SearchBox</a></li><li><a href="global.html#db">db</a></li><li><a href="global.html#deleteRecipe">deleteRecipe</a></li><li><a href="global.html#fb">fb</a></li><li><a href="global.html#firebaseApp">firebaseApp</a></li><li><a href="global.html#firebaseAuth">firebaseAuth</a></li><li><a href="global.html#firebaseConfig">firebaseConfig</a></li><li><a href="global.html#firestoreDb">firestoreDb</a></li><li><a href="global.html#getListener">getListener</a></li><li><a href="global.html#quickOrder">quickOrder</a></li><li><a href="global.html#recipeConverter">recipeConverter</a></li><li><a href="global.html#useAuth">useAuth</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue Feb 27 2024 18:55:03 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

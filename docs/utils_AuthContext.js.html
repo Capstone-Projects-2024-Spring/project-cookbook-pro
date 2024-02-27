@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: utils/AuthContext.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: utils/AuthContext.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { createContext, useState, useEffect, useContext } from "react";
+import { firebaseAuth } from "../firebase/firebaseConfig";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+
+/**
+ * @typedef {Object} UserInfo
+ * @property {string} email - User's email address.
+ * @property {string} password - User's password.
+ * @property {string} password1 - User's password for registration.
+ * @property {string} name - User's name for registration.
+ */
+
+/**
+ * @typedef {Object} AuthContextData
+ * @property {Object | null} user - The authenticated user object.
+ * @property {function} loginUser - Function to log in a user.
+ * @property {function} logoutUser - Function to log out the currently authenticated user.
+ * @property {function} registerUser - Function to register a new user.
+ * @property {function} signInWithGoogle - Function to sign in with Google.
+ */
+
+/**
+ * Context for managing authentication state and actions.
+ * @type {React.Context&lt;AuthContextData>}
+ */
+const AuthContext = createContext();
+
+/**
+ * Provides authentication context to the application.
+ * @param {Object} props - Component props.
+ * @param {React.ReactNode} props.children - The child components to be wrapped by the AuthProvider.
+ * @returns {React.ReactNode} - The JSX representation of the AuthProvider.
+ */
+export const AuthProvider = ({ children }) => {
+  const navigate = useNavigate();
+
+  /**
+   * @type {[boolean, function]} State hook for loading status.
+   */
+  const [loading, setLoading] = useState(true);
+
+  /**
+   * @type {[Object | null, function]} State hook for the authenticated user.
+   */
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    /**
+     * @type {function} Unsubscribe function for cleaning up the auth state listener.
+     */
+    const unsubscribe = firebaseAuth.onAuthStateChanged((authUser) => {
+      setUser(authUser);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  /**
+   * Logs in a user with the provided user information.
+   * @param {UserInfo} userInfo - User information for login.
+   * @returns {Promise&lt;void>} - A promise that resolves after the login attempt.
+   */
+  const loginUser = async (userInfo) => {
+    setLoading(true);
+
+    try {
+      await firebaseAuth.signInWithEmailAndPassword(
+        userInfo.email,
+        userInfo.password
+      );
+    } catch (error) {
+      console.error(error);
+    }
+
+    setLoading(false);
+  };
+
+  /**
+   * Logs out the currently authenticated user.
+   * @returns {Promise&lt;void>} - A promise that resolves after the logout attempt.
+   */
+  const logoutUser = async () => {
+    try {
+      await firebaseAuth.signOut();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  /**
+   * Registers a new user with the provided user information.
+   * @param {UserInfo} userInfo - User information for registration.
+   * @returns {Promise&lt;void>} - A promise that resolves after the registration attempt.
+   */
+  const registerUser = async (userInfo) => {
+    setLoading(true);
+
+    try {
+      await firebaseAuth.createUserWithEmailAndPassword(
+        userInfo.email,
+        userInfo.password1
+      );
+      await firebaseAuth.currentUser.updateProfile({
+        displayName: userInfo.name,
+      });
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+    }
+
+    setLoading(false);
+  };
+
+  /**
+   * Checks the current user's authentication status.
+   * @returns {void}
+   */
+  const checkUserStatus = () => {
+    const authUser = firebaseAuth.currentUser;
+    setUser(authUser);
+    setLoading(false);
+  };
+
+  /**
+   * Signs in a user using Google authentication.
+   * @returns {Promise&lt;void>} - A promise that resolves after the Google sign-in attempt.
+   */
+  const signInWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const userCredential = await signInWithPopup(firebaseAuth, provider);
+      const user = userCredential.user;
+      // Additional logic if needed
+      navigate("/search");
+    } catch (error) {
+      console.error("Google Sign-in Error:", error);
+      // Handle error or display a message to the user
+    }
+  };
+
+  /**
+   * The context data provided by AuthContext.
+   * @type {AuthContextData}
+   */
+  const contextData = {
+    user,
+    loginUser,
+    logoutUser,
+    registerUser,
+    signInWithGoogle,
+  };
+
+  return (
+    &lt;AuthContext.Provider value={contextData}>
+      {loading ? &lt;p>Loading...&lt;/p> : children}
+    &lt;/AuthContext.Provider>
+  );
+};
+
+/**
+ * Custom hook for accessing the authentication context.
+ * @returns {AuthContextData} - The authentication context data.
+ */
+export const useAuth = () => useContext(AuthContext);
+
+export default AuthContext;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-FirebaseConverter.html">FirebaseConverter</a></li><li><a href="module-Header.html">Header</a></li><li><a href="module-Login.html">Login</a></li><li><a href="module-PrivateRoutes.html">PrivateRoutes</a></li><li><a href="module-SearchPage.html">SearchPage</a></li><li><a href="module-SignUp.html">SignUp</a></li></ul><h3>Classes</h3><ul><li><a href="MealDataManager.html">MealDataManager</a></li><li><a href="module-FirebaseConverter-FirebaseConverter.html">FirebaseConverter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AuthContext">AuthContext</a></li><li><a href="global.html#AuthProvider">AuthProvider</a></li><li><a href="global.html#GetRecipes">GetRecipes</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#MealCard">MealCard</a></li><li><a href="global.html#PutRecipe">PutRecipe</a></li><li><a href="global.html#RecipeDetails">RecipeDetails</a></li><li><a href="global.html#SavedMeals">SavedMeals</a></li><li><a href="global.html#SearchBox">SearchBox</a></li><li><a href="global.html#db">db</a></li><li><a href="global.html#deleteRecipe">deleteRecipe</a></li><li><a href="global.html#fb">fb</a></li><li><a href="global.html#firebaseApp">firebaseApp</a></li><li><a href="global.html#firebaseAuth">firebaseAuth</a></li><li><a href="global.html#firebaseConfig">firebaseConfig</a></li><li><a href="global.html#firestoreDb">firestoreDb</a></li><li><a href="global.html#getListener">getListener</a></li><li><a href="global.html#quickOrder">quickOrder</a></li><li><a href="global.html#recipeConverter">recipeConverter</a></li><li><a href="global.html#useAuth">useAuth</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue Feb 27 2024 18:55:03 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

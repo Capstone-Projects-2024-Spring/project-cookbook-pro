@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: utils/FirebaseConverter.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: utils/FirebaseConverter.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Convert to and from Firebase and JSON recipe object.
+ * @module FirebaseConverter
+ */
+
+import { Recipe } from "../customObjects/Recipe.js";
+import { Ingredient } from "../customObjects/Ingredient.js";
+
+/**
+ * Class representing a FirebaseConverter for handling conversions between Firebase and JSON objects.
+ */
+class FirebaseConverter {
+  /**
+   * Create a FirebaseConverter.
+   */
+  constructor() {}
+
+  /**
+   * Firestore data converter for Ingredients.
+   * @memberof FirebaseConverter
+   * @type {object}
+   * @property {function} toFirestore - Convert to Firestore object.
+   * @property {function} fromFirestore - Convert to JSON.
+   */
+  ingredientsConverter = {
+    /**
+     * Convert Ingredient to Firestore object.
+     * @param {Ingredient} ingredient - The Ingredient object.
+     * @returns {object} - Firestore object representation of Ingredient.
+     */
+    toFirestore: (ingredient) => {
+      if (!ingredient) {
+        console.error("Ingredient is undefined or null");
+        return null;
+      }
+
+      return {
+        amount: ingredient.amount,
+        id: ingredient.id,
+        name: ingredient.name,
+        unit: ingredient.unit,
+      };
+    },
+
+    /**
+     * Convert Firestore snapshot to Ingredient JSON.
+     * @param {object} snapshot - Firestore snapshot.
+     * @param {object} options - Conversion options.
+     * @returns {Ingredient} - Ingredient object.
+     */
+    fromFirestore: (snapshot, options) => {
+      const data = snapshot.data(options);
+      return new Ingredient(data.amount, data.id, data.name, data.unit);
+    },
+  };
+
+  /**
+   * Firestore data converter for Recipe.
+   * @memberof FirebaseConverter
+   * @type {object}
+   * @property {function} toFirestore - Convert to Firestore object.
+   * @property {function} fromFirestore - Convert to JSON.
+   */
+  recipeConverter = {
+    /**
+     * Convert Recipe to Firestore object.
+     * @param {Recipe} recipe - The Recipe object.
+     * @returns {object} - Firestore object representation of Recipe.
+     */
+    toFirestore: (recipe) => {
+      if (!recipe) {
+        console.error("Recipe is undefined or null");
+        return null;
+      }
+      return {
+        cuisine: recipe.cuisine,
+        dishType: recipe.dishType,
+        id: recipe.id,
+        image: recipe.image,
+        ingredients: recipe.ingredients,
+        instructions: recipe.instructions,
+        name: recipe.name,
+        servings: recipe.servings,
+        summary: recipe.summary,
+        isSaved: recipe.isSaved,
+      };
+    },
+
+    /**
+     * Convert Firestore snapshot to Recipe JSON.
+     * @param {object} snapshot - Firestore snapshot.
+     * @returns {Recipe} - Recipe object.
+     */
+    fromFirestore: (snapshot) => {
+      const data = snapshot.data();
+      return new Recipe(
+        data.cuisine,
+        data.dishType,
+        data.id,
+        data.image,
+        data.ingredients,
+        data.instructions,
+        data.name,
+        data.servings,
+        data.summary,
+        data.isSaved
+      );
+    },
+  };
+}
+
+export default FirebaseConverter;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-FirebaseConverter.html">FirebaseConverter</a></li><li><a href="module-Header.html">Header</a></li><li><a href="module-Login.html">Login</a></li><li><a href="module-PrivateRoutes.html">PrivateRoutes</a></li><li><a href="module-SearchPage.html">SearchPage</a></li><li><a href="module-SignUp.html">SignUp</a></li></ul><h3>Classes</h3><ul><li><a href="MealDataManager.html">MealDataManager</a></li><li><a href="module-FirebaseConverter-FirebaseConverter.html">FirebaseConverter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AuthContext">AuthContext</a></li><li><a href="global.html#AuthProvider">AuthProvider</a></li><li><a href="global.html#GetRecipes">GetRecipes</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#MealCard">MealCard</a></li><li><a href="global.html#PutRecipe">PutRecipe</a></li><li><a href="global.html#RecipeDetails">RecipeDetails</a></li><li><a href="global.html#SavedMeals">SavedMeals</a></li><li><a href="global.html#SearchBox">SearchBox</a></li><li><a href="global.html#db">db</a></li><li><a href="global.html#deleteRecipe">deleteRecipe</a></li><li><a href="global.html#fb">fb</a></li><li><a href="global.html#firebaseApp">firebaseApp</a></li><li><a href="global.html#firebaseAuth">firebaseAuth</a></li><li><a href="global.html#firebaseConfig">firebaseConfig</a></li><li><a href="global.html#firestoreDb">firestoreDb</a></li><li><a href="global.html#getListener">getListener</a></li><li><a href="global.html#quickOrder">quickOrder</a></li><li><a href="global.html#recipeConverter">recipeConverter</a></li><li><a href="global.html#useAuth">useAuth</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue Feb 27 2024 18:55:03 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

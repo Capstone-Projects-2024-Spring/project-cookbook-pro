@@ -7,7 +7,8 @@
     "test": "react-scripts test --env=jsdom",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "docs": "jsdoc -c jsdoc.json"
   },
   "author": "",
   "license": "ISC",
@@ -36,6 +37,7 @@
   },
   "devDependencies": {
     "css-loader": "^6.10.0",
+    "jsdoc": "^4.0.2",
     "style-loader": "^3.3.4"
   }
 }

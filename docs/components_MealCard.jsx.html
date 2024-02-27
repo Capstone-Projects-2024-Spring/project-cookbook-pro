@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/MealCard.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/MealCard.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from "react";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardImg,
+  CardText,
+  CardTitle,
+} from "reactstrap";
+import RecipeDetails from "./RecipeDetails";
+import PutRecipe from "../firebase/putRecipe.js";
+
+/**
+ * Functional component representing a meal card.
+ *
+ * @component
+ * @param {Object} props - React component properties.
+ * @param {Object} props.meal - The meal object to display on the card.
+ */
+const MealCard = ({ meal }) => {
+  /**
+   * State hook to manage the visibility of recipe details modal.
+   * @type {[boolean, Function]}
+   */
+  const [showDetails, setShowDetails] = useState(false);
+
+  /**
+   * Toggles the visibility of recipe details modal.
+   */
+  const toggle = () => {
+    setShowDetails(!showDetails);
+  };
+
+  /**
+   * Saves the meal recipe into the user's data and closes the modal.
+   */
+  function saveData() {
+    /*
+        TODO: save recipe into user's data
+        TODO: also refactor to remove showDetails and replace the toggle function
+        they are extra and we can achieve the same functionality by checking if meal is null or not
+    */
+    const savedMeal = meal;
+    savedMeal.isSaved = true;
+    PutRecipe("savedRecipes", savedMeal);
+    toggle(); //close modal
+  }
+
+  /**
+   * Style object for the card width.
+   * @type {Object}
+   */
+  const width = { width: "18rem" };
+
+  /**
+   * Style object for the card border.
+   * @type {Object}
+   */
+  const cardStyle = {
+    border: "2px outset #FFA6A6",
+  };
+
+  /**
+   * JSX for the buttons in the card.
+   * @type {JSX.Element}
+   */
+  const buttonOptions = (
+    &lt;>
+      &lt;Button color="primary" onClick={saveData}>
+        Save Recipe
+      &lt;/Button>
+      &lt;Button color="secondary" onClick={toggle}>
+        Close
+      &lt;/Button>
+    &lt;/>
+  );
+
+  /**
+   * Renders the meal card component.
+   * @returns {JSX.Element} - JSX for the meal card.
+   */
+  return (
+    &lt;Card
+      className={"m-2 p-3 flex-fill shadow-sm"}
+      style={Object.assign(width, cardStyle)}
+    >
+      &lt;CardTitle>
+        &lt;h5 className="text-truncate m-2 p-0">{meal.name}&lt;/h5>
+      &lt;/CardTitle>
+      &lt;CardImg
+        className="m-0 border"
+        src={meal.image}
+        alt={`${meal.name} image`}
+      />
+      &lt;CardBody>
+        &lt;CardText className="text-truncate m-2 p-0">
+          {String(meal.summary).replace(/&lt;[^>]*>/g, "")}
+        &lt;/CardText>
+        &lt;Button color="primary" onClick={toggle}>
+          Details
+        &lt;/Button>
+        &lt;RecipeDetails
+          meal={meal}
+          showDetails={showDetails}
+          toggle={toggle}
+          buttonOptions={buttonOptions}
+        />
+        &lt;Button onClick={() => PutRecipe("quickOrder", meal)}>
+          Add to Quick Order
+        &lt;/Button>
+      &lt;/CardBody>
+    &lt;/Card>
+  );
+};
+
+export default MealCard;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-FirebaseConverter.html">FirebaseConverter</a></li><li><a href="module-Header.html">Header</a></li><li><a href="module-Login.html">Login</a></li><li><a href="module-PrivateRoutes.html">PrivateRoutes</a></li><li><a href="module-SearchPage.html">SearchPage</a></li><li><a href="module-SignUp.html">SignUp</a></li></ul><h3>Classes</h3><ul><li><a href="MealDataManager.html">MealDataManager</a></li><li><a href="module-FirebaseConverter-FirebaseConverter.html">FirebaseConverter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AuthContext">AuthContext</a></li><li><a href="global.html#AuthProvider">AuthProvider</a></li><li><a href="global.html#GetRecipes">GetRecipes</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#MealCard">MealCard</a></li><li><a href="global.html#PutRecipe">PutRecipe</a></li><li><a href="global.html#RecipeDetails">RecipeDetails</a></li><li><a href="global.html#SavedMeals">SavedMeals</a></li><li><a href="global.html#SearchBox">SearchBox</a></li><li><a href="global.html#db">db</a></li><li><a href="global.html#deleteRecipe">deleteRecipe</a></li><li><a href="global.html#fb">fb</a></li><li><a href="global.html#firebaseApp">firebaseApp</a></li><li><a href="global.html#firebaseAuth">firebaseAuth</a></li><li><a href="global.html#firebaseConfig">firebaseConfig</a></li><li><a href="global.html#firestoreDb">firestoreDb</a></li><li><a href="global.html#getListener">getListener</a></li><li><a href="global.html#quickOrder">quickOrder</a></li><li><a href="global.html#recipeConverter">recipeConverter</a></li><li><a href="global.html#useAuth">useAuth</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue Feb 27 2024 18:55:03 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

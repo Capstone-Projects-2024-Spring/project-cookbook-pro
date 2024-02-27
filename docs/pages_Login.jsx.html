@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pages/Login.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pages/Login.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Login component for user authentication.
+ * @module Login
+ * @exports Login
+ * @category Components
+ */
+
+import React, { useState, useEffect } from "react";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
+import "../index";
+import "../css/LoginSignUp.css";
+import "../firebase/firebaseConfig.js";
+import "./Home";
+import "./SignUp";
+
+/**
+ * Functional component representing the login page.
+ * @function Login
+ * @returns {JSX.Element} Login component JSX
+ */
+const Login = () => {
+  /**
+   * State for user email.
+   * @type {[string, function]}
+   */
+  const [userEmail, isUserEmail] = useState("");
+
+  /**
+   * State for user password.
+   * @type {[string, function]}
+   */
+  const [userPassword, isUserPassword] = useState("");
+
+  /**
+   * State for login error message.
+   * @type {[string, function]}
+   */
+  const [loginError, isLoginError] = useState("");
+
+  /**
+   * Firebase authentication instance.
+   * @type {Object}
+   */
+  const auth = getAuth();
+
+  /**
+   * Set document title and background color on component mount.
+   * @function
+   * @name useEffect
+   * @param {function} effect - Function to be executed on component mount.
+   * @param {Array} dependencies - Dependencies for the effect.
+   * @returns {void}
+   */
+  useEffect(() => {
+    document.title = "CookBook-Pro: Login";
+    document.body.classList.add("loginPage");
+    document.body.style.backgroundColor = "#E0EAFC";
+  }, []);
+
+  /**
+   * Check user input and attempt to sign in with email and password.
+   * @async
+   * @function checkInput
+   * @param {Event} e - The event object.
+   * @returns {Promise&lt;void>}
+   */
+  const checkInput = async (e) => {
+    e.preventDefault();
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        userEmail,
+        userPassword
+      );
+      const user = userCredential.user;
+      document.location.href = "/";
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      isLoginError("Invalid Email Or Password");
+      console.log(errorCode, errorMessage);
+    }
+  };
+
+  /**
+   * Sign in with Google using Firebase authentication.
+   * @async
+   * @function signInWithGoogle
+   * @returns {Promise&lt;void>}
+   */
+  const signInWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const userCredential = await signInWithPopup(auth, provider);
+      const user = userCredential.user;
+      isUserEmail(user.email);
+      document.location.href = "/search";
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      isLoginError("Invalid Credentials");
+      console.log(errorCode, errorMessage);
+    }
+  };
+
+  /**
+   * Render the login component.
+   * @function
+   * @returns {JSX.Element} Login component JSX
+   */
+  return (
+    &lt;div className="LogIn">
+      &lt;h1 className="Title">Log In&lt;/h1>
+      &lt;br />
+      &lt;center>
+        &lt;button
+          type="button"
+          className="googleSignInButton"
+          onClick={signInWithGoogle}
+        >
+          Log In with Google
+        &lt;/button>
+      &lt;/center>
+      &lt;form>
+        &lt;label className="Email">
+          Email&lt;br>&lt;/br>
+        &lt;/label>
+        &lt;input
+          value={userEmail}
+          onChange={(e) => isUserEmail(e.target.value)}
+          className="getEmail"
+          type="text"
+          id="isEmail"
+          name="isEmail"
+        />
+        &lt;br />
+        &lt;label className="Password">
+          Password&lt;br>&lt;/br>
+        &lt;/label>
+        &lt;input
+          value={userPassword}
+          onChange={(e) => isUserPassword(e.target.value)}
+          className="getPassword"
+          type="password"
+          id="isPassword"
+          name="isPassword"
+        />
+        &lt;div className="InvalidInput">
+          &lt;span style={{ color: "blue" }}>Forgot Password?&lt;/span>
+        &lt;/div>
+        {loginError ? &lt;label className="isInvalid">{loginError}&lt;/label> : null}
+        &lt;input
+          className="isValidate"
+          type="button"
+          id="isValid"
+          onClick={(e) => checkInput(e)}
+          value={"Log In"}
+        />
+      &lt;/form>
+      &lt;br />
+      &lt;p style={{ textAlign: "center" }}>
+        &lt;a href="/SignUp">Dont Have An Account? Create Account&lt;/a>
+      &lt;/p>
+    &lt;/div>
+  );
+};
+
+export default Login;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-FirebaseConverter.html">FirebaseConverter</a></li><li><a href="module-Header.html">Header</a></li><li><a href="module-Login.html">Login</a></li><li><a href="module-PrivateRoutes.html">PrivateRoutes</a></li><li><a href="module-SearchPage.html">SearchPage</a></li><li><a href="module-SignUp.html">SignUp</a></li></ul><h3>Classes</h3><ul><li><a href="MealDataManager.html">MealDataManager</a></li><li><a href="module-FirebaseConverter-FirebaseConverter.html">FirebaseConverter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AuthContext">AuthContext</a></li><li><a href="global.html#AuthProvider">AuthProvider</a></li><li><a href="global.html#GetRecipes">GetRecipes</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#MealCard">MealCard</a></li><li><a href="global.html#PutRecipe">PutRecipe</a></li><li><a href="global.html#RecipeDetails">RecipeDetails</a></li><li><a href="global.html#SavedMeals">SavedMeals</a></li><li><a href="global.html#SearchBox">SearchBox</a></li><li><a href="global.html#db">db</a></li><li><a href="global.html#deleteRecipe">deleteRecipe</a></li><li><a href="global.html#fb">fb</a></li><li><a href="global.html#firebaseApp">firebaseApp</a></li><li><a href="global.html#firebaseAuth">firebaseAuth</a></li><li><a href="global.html#firebaseConfig">firebaseConfig</a></li><li><a href="global.html#firestoreDb">firestoreDb</a></li><li><a href="global.html#getListener">getListener</a></li><li><a href="global.html#quickOrder">quickOrder</a></li><li><a href="global.html#recipeConverter">recipeConverter</a></li><li><a href="global.html#useAuth">useAuth</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue Feb 27 2024 18:55:03 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

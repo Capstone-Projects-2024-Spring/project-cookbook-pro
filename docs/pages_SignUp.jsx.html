@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pages/SignUp.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pages/SignUp.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * React component for user registration (Sign Up).
+ * @module SignUp
+ */
+
+import React, { useState, useEffect } from "react";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { firestoreDb } from "../firebase/firebaseConfig.js";
+import "../css/LoginSignUp.css";
+import "./Home.jsx";
+
+/**
+ * Functional component representing the SignUp page.
+ * @returns {JSX.Element} SignUp component
+ */
+var SignUp = () => {
+  /**
+   * State for storing the user's name.
+   * @type {[string, function]}
+   */
+  const [userName, isUserName] = useState("");
+
+  /**
+   * State for storing the user's email.
+   * @type {[string, function]}
+   */
+  const [userEmail, isUserEmail] = useState("");
+
+  /**
+   * State for storing any signup error message.
+   * @type {[string, function]}
+   */
+  const [signupError, isSignUpError] = useState("");
+
+  /**
+   * State for storing the user's password.
+   * @type {[string, function]}
+   */
+  const [userPassword, isUserPassword] = useState("");
+
+  /**
+   * Firebase authentication instance.
+   * @type {Object}
+   */
+  const auth = getAuth();
+
+  /**
+   * Side effect hook to update document title and body class.
+   */
+  useEffect(() => {
+    document.title = "CookBook-Pro: SignUp";
+    document.body.classList.add("loginPage");
+    document.body.style.backgroundColor = "#CFDEF3";
+  }, []);
+
+  /**
+   * Handles form submission to create a new user account.
+   * @param {Event} e - The form submission event.
+   * @returns {Promise&lt;void>} Promise that resolves after form submission.
+   */
+  const inputCredentials = async (e) => {
+    e.preventDefault();
+    await createUserWithEmailAndPassword(auth, userEmail, userPassword)
+      .then(async (userCredential) => {
+        const user = userCredential.user;
+        const isUID = user.uid;
+        const docSnap = await getDoc(doc(firestoreDb, "Users", isUID));
+        if (!docSnap.exists()) {
+          await setDoc(doc(firestoreDb, "Users", isUID), { recipeID: [""] });
+        }
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        isSignUpError(errorMessage);
+        console.log(errorCode, errorMessage);
+      });
+
+    await updateProfile(auth.currentUser, {
+      displayName: document.getElementById("isName").value,
+    })
+      .then(() => {
+        console.log(auth.currentUser);
+        document.location.href = "/";
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+      });
+  };
+
+  /**
+   * Renders the SignUp component.
+   * @returns {JSX.Element} SignUp component
+   */
+  return (
+    &lt;div className="SignUp">
+      &lt;h1 className="Title">Sign Up&lt;/h1>
+      &lt;br />
+      &lt;form>
+        &lt;label className="FullName">
+          Name&lt;br>&lt;/br>
+        &lt;/label>
+        &lt;input
+          value={userName}
+          onChange={(e) => isUserName(e.target.value)}
+          className="getFullName"
+          type="text"
+          id="isName"
+          name="isName"
+        />
+        &lt;br />
+        &lt;label className="Email">
+          Email&lt;br>&lt;/br>
+        &lt;/label>
+        &lt;input
+          value={userEmail}
+          onChange={(e) => isUserEmail(e.target.value)}
+          className="getEmail"
+          type="text"
+          id="isEmail"
+          name="isEmail"
+        />
+        &lt;br />
+        &lt;label className="Password">
+          Password&lt;br>&lt;/br>
+        &lt;/label>
+        &lt;input
+          value={userPassword}
+          onChange={(e) => isUserPassword(e.target.value)}
+          className="getPassword"
+          type="password"
+          id="isPassword"
+          name="isPassword"
+        />
+        {signupError ? (
+          &lt;label className="isInvalid">{signupError}&lt;/label>
+        ) : null}
+        &lt;br />
+        &lt;br />
+        &lt;input
+          className="isSubmission"
+          type="button"
+          id="isSubmit"
+          onClick={(e) => inputCredentials(e)}
+          value={"Sign Up"}
+        />
+      &lt;/form>
+    &lt;/div>
+  );
+};
+
+export default SignUp;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-FirebaseConverter.html">FirebaseConverter</a></li><li><a href="module-Header.html">Header</a></li><li><a href="module-Login.html">Login</a></li><li><a href="module-PrivateRoutes.html">PrivateRoutes</a></li><li><a href="module-SearchPage.html">SearchPage</a></li><li><a href="module-SignUp.html">SignUp</a></li></ul><h3>Classes</h3><ul><li><a href="MealDataManager.html">MealDataManager</a></li><li><a href="module-FirebaseConverter-FirebaseConverter.html">FirebaseConverter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AuthContext">AuthContext</a></li><li><a href="global.html#AuthProvider">AuthProvider</a></li><li><a href="global.html#GetRecipes">GetRecipes</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#MealCard">MealCard</a></li><li><a href="global.html#PutRecipe">PutRecipe</a></li><li><a href="global.html#RecipeDetails">RecipeDetails</a></li><li><a href="global.html#SavedMeals">SavedMeals</a></li><li><a href="global.html#SearchBox">SearchBox</a></li><li><a href="global.html#db">db</a></li><li><a href="global.html#deleteRecipe">deleteRecipe</a></li><li><a href="global.html#fb">fb</a></li><li><a href="global.html#firebaseApp">firebaseApp</a></li><li><a href="global.html#firebaseAuth">firebaseAuth</a></li><li><a href="global.html#firebaseConfig">firebaseConfig</a></li><li><a href="global.html#firestoreDb">firestoreDb</a></li><li><a href="global.html#getListener">getListener</a></li><li><a href="global.html#quickOrder">quickOrder</a></li><li><a href="global.html#recipeConverter">recipeConverter</a></li><li><a href="global.html#useAuth">useAuth</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue Feb 27 2024 18:55:03 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

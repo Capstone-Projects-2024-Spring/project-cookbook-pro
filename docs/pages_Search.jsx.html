@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pages/Search.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pages/Search.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @fileOverview SearchPage component for displaying search results and related components.
+ * @module SearchPage
+ */
+
+import React, { useState } from "react";
+import { Row, Col, Container, Spinner } from "reactstrap";
+import MealCard from "../components/MealCard.jsx";
+import QuickOrder from "../components/QuickOrder.jsx";
+import SavedMeals from "../components/SavedMeals.jsx";
+import SearchBox from "../components/SearchBox.jsx";
+import MealDataManager from "../utils/MealDataManager.js";
+import InfiniteScroll from "react-infinite-scroll-component";
+
+/**
+ * Functional component representing the SearchPage.
+ * @function SearchPage
+ * @returns {JSX.Element} JSX for SearchPage component.
+ */
+const SearchPage = () => {
+  /**
+   * State for storing search results and related information.
+   * @type {[string | Meal[], React.Dispatch&lt;React.SetStateAction&lt;string | Meal[]>>, number | boolean, React.Dispatch&lt;React.SetStateAction&lt;number | boolean>>]}
+   */
+  const [searchResults, setSearchResults] = useState("initial page load");
+  const [query, setQuery] = useState("");
+  const [numResults, setNumResults] = useState(-1);
+
+  /**
+   * Handles the search results obtained from the SearchBox component.
+   * @param {Object} results - Object containing the list of results and total results count.
+   * @param {Meal[]} results.resultsList - List of search results.
+   * @param {number} results.totalResults - Total number of results.
+   * @returns {void}
+   */
+  const handleSearchResults = (results) => {
+    setSearchResults(results.resultsList);
+    setNumResults(results.totalResults);
+  };
+
+  // Create an instance of MealDataManager for handling meal-related data.
+  const mealDataManager = new MealDataManager();
+
+  /**
+   * JSX element representing a loading spinner.
+   * @type {JSX.Element}
+   */
+  const spinner = (
+    &lt;Col className="d-flex m-5 p-0 justify-content-center">
+      &lt;Spinner>Loading&lt;/Spinner>
+    &lt;/Col>
+  );
+
+  /**
+   * Handles fetching more search results for infinite scroll.
+   * @async
+   * @returns {Promise&lt;void>}
+   */
+  const fetchMoreResults = async () => {
+    try {
+      const spoonacularQueryResults =
+        await mealDataManager.queryRecipeFromSpoonacular(
+          query,
+          searchResults.length
+        );
+
+      setSearchResults(
+        searchResults.concat(spoonacularQueryResults.resultsList)
+      );
+
+      // Spoonacular caps results to 1000
+      if (searchResults.length >= numResults || searchResults.length >= 999) {
+        console.log(
+          "searchResults.length=" +
+            searchResults.length +
+            " numResults=" +
+            numResults
+        );
+        setNumResults(false);
+      }
+    } catch (error) {
+      console.error("error: " + error);
+    }
+  };
+
+  // Conditionally render the results
+  let results;
+
+  // If page loaded
+  if (searchResults == "initial page load") {
+    results = (
+      &lt;Col className="d-flex m-5 p-0 justify-content-center">
+        &lt;p className="text-secondary">search something&lt;/p>
+      &lt;/Col>
+    );
+  } else if (Array.isArray(searchResults)) {
+    // If there are results, render them using InfiniteScroll
+    results = (
+      &lt;InfiniteScroll
+        dataLength={searchResults.length}
+        next={fetchMoreResults}
+        hasMore={numResults}
+        loader={spinner}
+        endMessage={
+          &lt;Col className="d-flex m-5 p-0 justify-content-center">
+            &lt;p className="text-secondary">
+              Total {searchResults.length} results
+            &lt;/p>
+          &lt;/Col>
+        }
+      >
+        &lt;Container className="d-flex col-12 flex-wrap mt-3">
+          {searchResults.map((meal, index) => (
+            &lt;MealCard key={index} meal={meal} />
+          ))}
+        &lt;/Container>
+      &lt;/InfiniteScroll>
+    );
+  } else if (!Array.isArray(searchResults)) {
+    // If there are no results, render the spinner
+    results = spinner;
+  }
+
+  /**
+   * JSX element representing the entire SearchPage component.
+   * @type {JSX.Element}
+   */
+  return (
+    &lt;Container>
+      &lt;h1 className="d-flex justify-content-center">Search for recipes&lt;/h1>
+      &lt;Row>
+        &lt;Container className="d-flex justify-content-center">
+          &lt;br>&lt;/br>
+          &lt;SearchBox
+            onSearch={handleSearchResults}
+            query={query}
+            setQuery={setQuery}
+          />
+        &lt;/Container>
+      &lt;/Row>
+      &lt;Row>
+        &lt;Col className="col-2">
+          &lt;SavedMeals />
+        &lt;/Col>
+        &lt;Container className="col-8">{results}&lt;/Container>
+        &lt;Col className="col-2">
+          &lt;QuickOrder />
+        &lt;/Col>
+      &lt;/Row>
+    &lt;/Container>
+  );
+};
+
+export default SearchPage;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-FirebaseConverter.html">FirebaseConverter</a></li><li><a href="module-Header.html">Header</a></li><li><a href="module-Login.html">Login</a></li><li><a href="module-PrivateRoutes.html">PrivateRoutes</a></li><li><a href="module-SearchPage.html">SearchPage</a></li><li><a href="module-SignUp.html">SignUp</a></li></ul><h3>Classes</h3><ul><li><a href="MealDataManager.html">MealDataManager</a></li><li><a href="module-FirebaseConverter-FirebaseConverter.html">FirebaseConverter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AuthContext">AuthContext</a></li><li><a href="global.html#AuthProvider">AuthProvider</a></li><li><a href="global.html#GetRecipes">GetRecipes</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#MealCard">MealCard</a></li><li><a href="global.html#PutRecipe">PutRecipe</a></li><li><a href="global.html#RecipeDetails">RecipeDetails</a></li><li><a href="global.html#SavedMeals">SavedMeals</a></li><li><a href="global.html#SearchBox">SearchBox</a></li><li><a href="global.html#db">db</a></li><li><a href="global.html#deleteRecipe">deleteRecipe</a></li><li><a href="global.html#fb">fb</a></li><li><a href="global.html#firebaseApp">firebaseApp</a></li><li><a href="global.html#firebaseAuth">firebaseAuth</a></li><li><a href="global.html#firebaseConfig">firebaseConfig</a></li><li><a href="global.html#firestoreDb">firestoreDb</a></li><li><a href="global.html#getListener">getListener</a></li><li><a href="global.html#quickOrder">quickOrder</a></li><li><a href="global.html#recipeConverter">recipeConverter</a></li><li><a href="global.html#useAuth">useAuth</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue Feb 27 2024 18:55:03 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

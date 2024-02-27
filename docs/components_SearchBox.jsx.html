@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/SearchBox.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/SearchBox.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from "react";
+import MealDataManager from "../utils/MealDataManager.js";
+import {
+  Dropdown,
+  DropdownMenu,
+  DropdownToggle,
+  Input,
+  InputGroup,
+  Button,
+  Container,
+  Row,
+  Col,
+} from "reactstrap";
+
+import SearchBoxFilter from "./SearchBoxFilter";
+
+const mealDataManager = new MealDataManager();
+
+/**
+ * React component for a search box with filters.
+ * @component
+ * @param {Object} props - React component props.
+ * @param {function} props.onSearch - Callback function triggered on search.
+ * @param {string} props.query - Current search query.
+ * @param {function} props.setQuery - Function to set the search query.
+ * @returns {JSX.Element} SearchBox component.
+ */
+const SearchBox = ({ onSearch, query, setQuery }) => {
+  // State variables
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  /**
+   * Toggles the dropdown menu's visibility.
+   * @function
+   */
+  const toggle = () => setDropdownOpen((prevState) => !prevState);
+
+  /**
+   * Handles input change in the search box.
+   * @function
+   * @param {Object} e - Input change event.
+   */
+  const handleInputChange = (e) => {
+    setQuery(e.target.value);
+  };
+
+  // True/false search parameters, we can add as many as we want.
+  // https://spoonacular.com/food-api/docs#Diets
+  const [dietFilterOptions, setDietFilterOptions] = useState({
+    Vegan: false,
+    Vegetarian: false,
+    "Gluten Free": false,
+    Ketogenic: false,
+    Pescetarian: false,
+    Paleo: false,
+  });
+
+  // https://spoonacular.com/food-api/docs#Intolerances
+  const [intoleranceFilterOptions, setIntoleranceFilterOptions] = useState({
+    Diary: false,
+    Egg: false,
+    Gluten: false,
+    Grain: false,
+    Peanut: false,
+    Seafood: false,
+    Sesame: false,
+    Shellfish: false,
+    Soy: false,
+    Sulfite: false,
+    "Tree Nut": false,
+    Wheat: false,
+  });
+
+  const [mealTypes, setMealTypes] = useState({
+    "Main Course": false,
+    "Side Dish": false,
+    Dessert: false,
+    Appetizer: false,
+    Salad: false,
+    Bread: false,
+    Breakfast: false,
+    Soup: false,
+    Beverage: false,
+    Sauce: false,
+    Marinade: false,
+    Fingerfood: false,
+    Snack: false,
+    Drink: false,
+  });
+
+  /**
+   * Handles the search functionality.
+   * @async
+   * @function
+   */
+  const handleSearch = async () => {
+    try {
+      // Clear search results
+      onSearch("yayspin! :D this string doesn't mean anything");
+
+      // Wait for the query to complete and get the results
+      const spoonacularQueryResults =
+        await mealDataManager.queryRecipeFromSpoonacular(query, 0);
+
+      // Pass the search results to the parent component
+      onSearch(spoonacularQueryResults);
+    } catch (error) {
+      console.error(error); // Handle errors if the Promise is rejected
+    }
+  };
+
+  return (
+    &lt;InputGroup className="w-50 min-width: 300px; shadow-lg" id="search-box">
+      &lt;Dropdown isOpen={dropdownOpen} toggle={toggle}>
+        &lt;DropdownToggle caret>Filter &lt;/DropdownToggle>
+        &lt;DropdownMenu>
+          &lt;Container className="m-2">
+            &lt;Row>
+              &lt;Col>
+                &lt;h6>Diets&lt;/h6>
+                &lt;SearchBoxFilter
+                  setfilterOptions={setDietFilterOptions}
+                  filterOptions={dietFilterOptions}
+                />
+              &lt;/Col>
+              &lt;Col>
+                &lt;h6>Allergies&lt;/h6>
+                &lt;SearchBoxFilter
+                  setfilterOptions={setIntoleranceFilterOptions}
+                  filterOptions={intoleranceFilterOptions}
+                />
+              &lt;/Col>
+              &lt;Col>
+                &lt;h6>Type&lt;/h6>
+                &lt;SearchBoxFilter
+                  setfilterOptions={setMealTypes}
+                  filterOptions={mealTypes}
+                />
+              &lt;/Col>
+            &lt;/Row>
+          &lt;/Container>
+        &lt;/DropdownMenu>
+      &lt;/Dropdown>
+
+      &lt;Input
+        type="text"
+        placeholder="Enter your search"
+        value={query}
+        onChange={handleInputChange}
+        onKeyDown={(e) => e.key === "Enter" &amp;&amp; handleSearch()}
+      />
+
+      &lt;Button color="primary" onClick={handleSearch}>
+        Search🔍
+      &lt;/Button>
+    &lt;/InputGroup>
+  );
+};
+
+export default SearchBox;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-App.html">App</a></li><li><a href="module-FirebaseConverter.html">FirebaseConverter</a></li><li><a href="module-Header.html">Header</a></li><li><a href="module-Login.html">Login</a></li><li><a href="module-PrivateRoutes.html">PrivateRoutes</a></li><li><a href="module-SearchPage.html">SearchPage</a></li><li><a href="module-SignUp.html">SignUp</a></li></ul><h3>Classes</h3><ul><li><a href="MealDataManager.html">MealDataManager</a></li><li><a href="module-FirebaseConverter-FirebaseConverter.html">FirebaseConverter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AuthContext">AuthContext</a></li><li><a href="global.html#AuthProvider">AuthProvider</a></li><li><a href="global.html#GetRecipes">GetRecipes</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#MealCard">MealCard</a></li><li><a href="global.html#PutRecipe">PutRecipe</a></li><li><a href="global.html#RecipeDetails">RecipeDetails</a></li><li><a href="global.html#SavedMeals">SavedMeals</a></li><li><a href="global.html#SearchBox">SearchBox</a></li><li><a href="global.html#db">db</a></li><li><a href="global.html#deleteRecipe">deleteRecipe</a></li><li><a href="global.html#fb">fb</a></li><li><a href="global.html#firebaseApp">firebaseApp</a></li><li><a href="global.html#firebaseAuth">firebaseAuth</a></li><li><a href="global.html#firebaseConfig">firebaseConfig</a></li><li><a href="global.html#firestoreDb">firestoreDb</a></li><li><a href="global.html#getListener">getListener</a></li><li><a href="global.html#quickOrder">quickOrder</a></li><li><a href="global.html#recipeConverter">recipeConverter</a></li><li><a href="global.html#useAuth">useAuth</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue Feb 27 2024 18:55:03 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
