@@ -27,6 +27,9 @@ const Header = () => {
             <Link to="/search" className="header--link">
               Search
             </Link>
+            <Link to="/recommendations" className="header--link">
+              Recommendations
+            </Link>
             <button onClick={logoutUser} className="btn">
               Logout {user.displayName ? `(${user.displayName})` : ""}
             </button>
