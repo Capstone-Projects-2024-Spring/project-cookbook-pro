@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Search from "./pages/Search";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
+import Recommendations from "./pages/Recommendations";
 import Header from "./components/Header";
 import PrivateRoutes from "./utils/PrivateRoutes";
 import { AuthProvider } from "./utils/AuthContext";
@@ -21,6 +22,7 @@ function App() {
           <Route element={<PrivateRoutes />}>
             <Route path="/" element={<Home />} />
             <Route path="/search" element={<Search />} />
+            <Route path="/recommendations" element={<Recommendations />} />
           </Route>
         </Routes>
       </AuthProvider>
