@@ -5,11 +5,12 @@ import Search from "./pages/Search";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Header from "./components/Header";
+import Health from "./pages/Health";
 import PrivateRoutes from "./utils/PrivateRoutes";
 import { AuthProvider } from "./utils/AuthContext";
 import "./css/styles.css";
 import "bootstrap/dist/css/bootstrap.css";
-
+ 
 function App() {
   return (
     <Router>
@@ -21,6 +22,7 @@ function App() {
           <Route element={<PrivateRoutes />}>
             <Route path="/" element={<Home />} />
             <Route path="/search" element={<Search />} />
+            <Route path="/health" element={<Health />} />
           </Route>
         </Routes>
       </AuthProvider>

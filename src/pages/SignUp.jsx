@@ -7,7 +7,7 @@ import {
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { firestoreDb } from "../firebase/firebaseConfig.js";
 import "../css/LoginSignUp.css";
-import "./Home.jsx";
+import "./Home.jsx"; 
 
 var SignUp = () => {
   const [userName, isUserName] = useState("");
