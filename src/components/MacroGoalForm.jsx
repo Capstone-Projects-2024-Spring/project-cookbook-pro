@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+
 const MacroGoalForm = () => {
   const [formData, setFormData] = useState({
     caloriesGoal: '',
@@ -29,9 +30,14 @@ const MacroGoalForm = () => {
   };
 
   return (
+    <div>
+    <br/>  
+    <h3>Enter your desired macronutrients below:</h3>
+    <p>(You'll be able to go back and edit them later!)</p>
+    <br/>
     <form onSubmit={handleSubmit}>
       <label>
-        Calorie Goal:
+        Calorie Goal (cal):
         <input
           style={inputStyle}
           type="number"
@@ -42,7 +48,7 @@ const MacroGoalForm = () => {
       </label>
       <br />
       <label>
-        Protein Goal:
+        Protein Goal (g):
         <input
           style={inputStyle}
           type="number"
@@ -53,7 +59,7 @@ const MacroGoalForm = () => {
       </label>
       <br />
       <label>
-        Carbohydrate Goal:
+        Carbohydrate Goal (g):
         <input
           style={inputStyle}
           type="number"
@@ -64,7 +70,7 @@ const MacroGoalForm = () => {
       </label>
       <br />
       <label>
-        Fat Goal:
+        Fat Goal (g):
         <input
           style={inputStyle}
           type="number"
@@ -77,6 +83,7 @@ const MacroGoalForm = () => {
       <br />
       <button type="submit">Submit</button>
     </form>
+    </div>
   );
 };
 
