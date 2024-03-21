@@ -1,0 +1,10 @@
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+  }
+  
+  .form-input {
+    width: 300px;
+    margin-bottom: 10px; /* Add some space between input fields */
+  }

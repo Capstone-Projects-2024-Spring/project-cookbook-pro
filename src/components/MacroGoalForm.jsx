@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../css/macroGoals.css';
 
 
 const MacroGoalForm = () => {
@@ -9,6 +10,8 @@ const MacroGoalForm = () => {
     fatGoal: ''
   });
 
+  const [isVisible, setIsVisible] = useState(true);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -16,6 +19,8 @@ const MacroGoalForm = () => {
       [name]: value
     });
   };
+
+  
 
 
   const inputStyle = {
@@ -27,7 +32,26 @@ const MacroGoalForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData); 
+    // Object is returned in console
+    setIsVisible(false);
   };
+
+
+
+  const handleEdit = () => {
+    setIsVisible(true);
+  };
+
+  if (!isVisible) {
+    return (
+      <div style={{ textAlign: 'center' }}>
+        <p>Goals saved to profile!</p>
+        <div style={{ marginTop: '20px' }}>
+          <button onClick={handleEdit}>Edit</button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -35,7 +59,7 @@ const MacroGoalForm = () => {
     <h3>Enter your desired macronutrients below:</h3>
     <p>(You'll be able to go back and edit them later!)</p>
     <br/>
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="form-container">
       <label>
         Calorie Goal (cal):
         <input
@@ -44,6 +68,7 @@ const MacroGoalForm = () => {
           name="caloriesGoal"
           value={formData.caloriesGoal}
           onChange={handleChange}
+          className="form-input"
         />
       </label>
       <br />
@@ -55,6 +80,7 @@ const MacroGoalForm = () => {
           name="proteinGoal"
           value={formData.proteinGoal}
           onChange={handleChange}
+          className="form-input"
         />
       </label>
       <br />
@@ -66,6 +92,7 @@ const MacroGoalForm = () => {
           name="carbGoal"
           value={formData.carbGoal}
           onChange={handleChange}
+          className="form-input"
         />
       </label>
       <br />
@@ -77,11 +104,12 @@ const MacroGoalForm = () => {
           name="fatGoal"
           value={formData.fatGoal}
           onChange={handleChange}
+          className="form-input"
         />
       </label>
       <br />
       <br />
-      <button type="submit">Submit</button>
+      <button type="submit" style={{ marginLeft: 'auto', marginRight: 'auto', display: 'block' }}>Submit</button>
     </form>
     </div>
   );
