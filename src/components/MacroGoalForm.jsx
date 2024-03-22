@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
-import '../css/macroGoals.css';
-
+import React, { useState } from "react";
+import "../css/HealthForm.css";
 
 const MacroGoalForm = () => {
   const [formData, setFormData] = useState({
-    caloriesGoal: '',
-    proteinGoal: '',
-    carbGoal: '',
-    fatGoal: ''
+    caloriesGoal: "",
+    proteinGoal: "",
+    carbGoal: "",
+    fatGoal: "",
   });
 
   const [isVisible, setIsVisible] = useState(true);
@@ -16,27 +15,18 @@ const MacroGoalForm = () => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
   };
 
 
 
-
-  const inputStyle = {
-    textAlign: 'center', 
-    width: '100%', 
-    boxSizing: 'border-box'
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData); 
+    console.log(formData);
     // Object is returned in console
     setIsVisible(false);
   };
-
-
 
   const handleEdit = () => {
     setIsVisible(true);
@@ -44,9 +34,9 @@ const MacroGoalForm = () => {
 
   if (!isVisible) {
     return (
-      <div style={{ textAlign: 'center' }}>
+      <div style={{ textAlign: "center" }}>
         <p>Goals saved to profile!</p>
-        <div style={{ marginTop: '20px' }}>
+        <div style={{ marginTop: "20px" }}>
           <button onClick={handleEdit}>Edit</button>
         </div>
       </div>
@@ -54,63 +44,63 @@ const MacroGoalForm = () => {
   }
 
   return (
-    <div>
-    <br/>  
-    <h3>Enter your desired macronutrients below:</h3>
-    <p>(You'll be able to go back and edit them later!)</p>
-    <br/>
-    <form onSubmit={handleSubmit} className="form-container">
-      <label>
-        Calorie Goal (cal):
-        <input
-          style={inputStyle}
-          type="number"
-          name="caloriesGoal"
-          value={formData.caloriesGoal}
-          onChange={handleChange}
-          className="form-input"
-        />
-      </label>
+    <div className="macro-form-container">
+      <div id=""></div>
       <br />
-      <label>
-        Protein Goal (g):
-        <input
-          style={inputStyle}
-          type="number"
-          name="proteinGoal"
-          value={formData.proteinGoal}
-          onChange={handleChange}
-          className="form-input"
-        />
-      </label>
+      <h3>Enter your desired macronutrients below:</h3>
+      <p>(You'll be able to go back and edit them later!)</p>
       <br />
-      <label>
-        Carbohydrate Goal (g):
-        <input
-          style={inputStyle}
-          type="number"
-          name="carbGoal"
-          value={formData.carbGoal}
-          onChange={handleChange}
-          className="form-input"
-        />
-      </label>
-      <br />
-      <label>
-        Fat Goal (g):
-        <input
-          style={inputStyle}
-          type="number"
-          name="fatGoal"
-          value={formData.fatGoal}
-          onChange={handleChange}
-          className="form-input"
-        />
-      </label>
-      <br />
-      <br />
-      <button type="submit" style={{ marginLeft: 'auto', marginRight: 'auto', display: 'block' }}>Submit</button>
-    </form>
+      <div id="form-input-container">
+      <form onSubmit={handleSubmit}>
+        <label>
+          Calorie Goal (cal):
+          <input
+            type="number"
+            name="caloriesGoal"
+            value={formData.caloriesGoal}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Protein Goal (g):
+          <input
+            type="number"
+            name="proteinGoal"
+            value={formData.proteinGoal}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Carbohydrate Goal (g):
+          <input
+            type="number"
+            name="carbGoal"
+            value={formData.carbGoal}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Fat Goal (g):
+          <input
+            type="number"
+            name="fatGoal"
+            value={formData.fatGoal}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <br />
+        <button
+          type="submit"
+          style={{ marginLeft: "auto", marginRight: "auto", display: "block" }}
+        >
+          Submit
+        </button>
+      </form>
+      </div>
     </div>
   );
 };

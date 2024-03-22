@@ -1,0 +1,10 @@
+.macro-form-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+#form-input-container {
+  align-items: center;
+  width: 100px;
+}
