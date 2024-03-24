@@ -17,7 +17,7 @@ const App = () => {
     setError(''); // Clear any previous errors
 
     try {
-       const openai = new OpenAI({ apiKey: apiKey});
+       const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY, dangerouslyAllowBrowser: true});
       //Model setting
       const gptModel = "gpt-4-0125-preview";
 

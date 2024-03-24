@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import GPT from "../components/GPT";
 
 const Recommendations = () => {
   const [toggle, setToggle] = useState(false);
@@ -10,6 +11,7 @@ const Recommendations = () => {
   return (
     <div>
       <h1>Welcome to the Recommendations Page</h1>
+      <GPT /> {}
     </div>
   );
 };
