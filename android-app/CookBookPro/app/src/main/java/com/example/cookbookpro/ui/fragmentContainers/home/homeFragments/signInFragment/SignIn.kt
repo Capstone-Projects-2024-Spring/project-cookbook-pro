@@ -61,53 +61,11 @@ class SignIn : Fragment() {
             oneTapClient = Identity.getSignInClient(requireContext())
         )
 
-        val editTextEmail: EditText = view.findViewById(R.id.editTextTextEmailAddress)
-        val editTextPassword: EditText = view.findViewById(R.id.editTextTextPassword)
         val buttonSignIn: Button = view.findViewById(R.id.signInButton)
-        val googleSignIn: TextView = view.findViewById(R.id.googleSignIn)
-        val signOut: Button = view.findViewById(R.id.signOutButton)
-        if(googleAuthUiClient.getSignedInUser() == null){
-            signOut.visibility = View.INVISIBLE
-        }
-        welcomeMessage()
-        signOut.setOnClickListener {
-            googleAuthUiClient.signOut()
-            welcomeMessage()
-        }
 
         buttonSignIn.setOnClickListener {
             signInWithGoogle()
             var userData = googleAuthUiClient.getSignedInUser()
-            if (userData != null) {
-                signOut.visibility = View.VISIBLE
-            }
-
-                    /*val email = editTextEmail.text.toString()
-                val password = editTextPassword.text.toString()
-                if(validateFields(email)){
-                    (activity as? MainActivity)?.attemptSignIn(email, password)
-                }
-                else {
-                    editTextEmail.setText("")
-                    editTextEmail.setHintTextColor(Color.rgb(255, 66, 66));
-                    editTextEmail.hint = "Invalid Email"
-                }*/
-        }
-
-        googleSignIn.setOnClickListener {
-            signInWithGoogle()
-        }
-    }
-    fun welcomeMessage(){
-        val welcomeMessage: TextView? = view?.findViewById(R.id.welcomeMessage)
-        val userData = googleAuthUiClient.getSignedInUser()
-        if (welcomeMessage != null) {
-            if (userData != null) {
-                welcomeMessage.text = "Welcome ${userData.userName}"
-            }
-            else {
-                welcomeMessage.text = "Please Sign In"
-            }
         }
     }
 
@@ -136,11 +94,5 @@ class SignIn : Fragment() {
                 )
             }
         }
-    }
-
-
-    private fun validateFields(email: String): Boolean{
-        val emailPattern = "^[A-Za-z0-9+_.-]+@(.+)$"
-        return !(email.isEmpty() || !email.matches(emailPattern.toRegex()))
     }
 }

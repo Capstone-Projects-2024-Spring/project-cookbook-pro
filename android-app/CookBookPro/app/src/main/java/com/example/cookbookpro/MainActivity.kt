@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity() {
                 // User is signed in
                 // Navigate to the appropriate destination or update UI
                 println("USER IS SIGNED IN ALREADY")
-                navController.navigate(R.id.navigation_sign_in)
+                navController.navigate(R.id.navigation_home)
             } else {
                 // User is signed out
                 // Navigate to the sign-in screen or update UI
