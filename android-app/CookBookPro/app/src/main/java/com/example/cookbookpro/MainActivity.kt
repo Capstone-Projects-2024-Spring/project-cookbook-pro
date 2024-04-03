@@ -109,77 +109,30 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+//      val viewModel = ViewModelProvider(this)[SignInViewModel::class.java]
 
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        val appBarConfiguration = AppBarConfiguration(
-            setOf( //set of the containerFragmentViews
-                R.id.navigation_home, R.id.navigation_profile, R.id.navigation_notifications
-            )
-        )
-        //setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-        Firebase.initialize(this)
-        // Initialize Firebase Auth
-        auth = Firebase.auth
-/*
-        val viewModel = ViewModelProvider(this)[SignInViewModel::class.java]
-*/
 
-        // Create your GoogleAuthUiClient instance
-/*
-        val googleAuthUiClient = GoogleAuthUiClient(this, oneTapClient)
-*/
+        // Initialize Firebase Auth
+        Firebase.initialize(this)
+        auth = Firebase.auth
         val authStateListener = FirebaseAuth.AuthStateListener { auth ->
             val user = auth.currentUser
             if (user != null) {
-                // User is signed in
-                // Navigate to the appropriate destination or update UI
+                // User is signed in update Navigation
                 println("USER IS SIGNED IN ALREADY")
                 navController.navigate(R.id.navigation_home)
             } else {
-                // User is signed out
-                // Navigate to the sign-in screen or update UI
-                /*val navController = findNavController(R.id.nav_host_fragment_activity_main)*/
+                // User is signed out update Navigation
                 navController.navigate(R.id.navigation_sign_in)
             }
         }
     // Add the AuthStateListener
     auth.addAuthStateListener(authStateListener)
     }
-
-    fun navigateToList(){
-        val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        navController.navigate(R.id.navigation_ingredient_list)
-    }
-
-    fun checkAuthentication(): Boolean {
-        val currentUser = auth.currentUser
-        println("PRE-AUTHENTICATION")
-        if (currentUser != null) {
-            println("Authenticated!!!")
-            return true
-        }
-        else{
-            println("UnAuthenticated!!!")
-            return false
-        }
-    }
-    public override fun onStart() {
-        super.onStart()
-        attemptSignIn("","")
-        // Check if user is signed in (non-null) and update UI accordingly.
-        /*if(!checkAuthentication()){
-            val navController = findNavController(R.id.nav_host_fragment_activity_main)
-            navController.navigate(R.id.navigation_sign_in)
-        }*/
-    }
+    //val navController = findNavController(R.id.nav_host_fragment_activity_main)
     private fun reload(user: FirebaseUser?) {
-    }
-
-    fun attemptSignIn(email: String, password: String): Boolean {
-        return true
     }
 }
