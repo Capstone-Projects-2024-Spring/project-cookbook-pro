@@ -6,6 +6,7 @@ const GPT = () => {
   const [message, setMessage] = useState("");
   const [response, setResponse] = useState("");
   const [recipeNames, setRecipeNames] = useState([]);
+  const [responseHistory, setResponseHistory] = useState([]);
   const [error, setError] = useState("");
   const { user } = useAuth();
   const handleChange = (e) => {
@@ -66,6 +67,7 @@ const GPT = () => {
       const assistantResponse = completion.choices?.find(choice => choice.message.role === "assistant");
       if (assistantResponse) {
         setResponse(assistantResponse.message.content);
+        setResponseHistory((prevHistory) => [...prevHistory, assistantResponse.message.content]);
         // Other Firestore operations can go here if needed
       } else {
         throw new Error("Assistant response not found");
@@ -75,6 +77,30 @@ const GPT = () => {
       console.error("Error:", error);
     }
   }
+  const styles = {
+    responseContainer: {
+      maxHeight: "700px",
+      overflowY: "auto",
+      textAlign: "center",
+      backgroundColor: "#fff",
+      padding: "20px",
+      borderRadius: "8px",
+      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+      maxWidth: "800px", // Set a maximum width for the container
+    },
+    responseItem: {
+      backgroundColor: "#f5f5f5",
+      padding: "20px",
+      marginBottom: "20px",
+      borderRadius: "8px",
+      display: "inline-block",
+      textAlign: "left",
+      fontSize: "16px",
+      lineHeight: "1.5",
+      wordWrap: "break-word", // Add this line
+      overflowWrap: "break-word", // Add this line as well
+    },
+  };
   
   return (
     <div>
@@ -88,8 +114,14 @@ const GPT = () => {
       </form>
       {error && <div>Error: {error}</div>}
       <div>
-        <h2>Response:</h2>
-        <pre>{response}</pre>
+        <h2>Response History:</h2>
+        <div style={styles.responseContainer}>
+          {responseHistory.map((response, index) => (
+            <div key={index} style={styles.responseItem}>
+              <pre>{response}</pre>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
