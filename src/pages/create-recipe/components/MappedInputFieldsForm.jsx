@@ -1,6 +1,6 @@
 import React from "react";
 
-const FlexibleForm = ({ fields, formData, onChange }) => {
+const MappedInputFieldsForm = ({ fields, formData, onChange }) => {
   return (
     <div>
       {fields.map((field) => (
@@ -22,4 +22,4 @@ const FlexibleForm = ({ fields, formData, onChange }) => {
   );
 };
 
-export default FlexibleForm;
+export default MappedInputFieldsForm;

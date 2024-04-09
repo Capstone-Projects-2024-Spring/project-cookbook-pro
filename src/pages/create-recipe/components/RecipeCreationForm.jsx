@@ -1,13 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../../../utils/AuthContext.js";
 import { Recipe } from "../../../customObjects/Recipe.js";
 import { Ingredient } from "../../../customObjects/Ingredient.js";
 import FirestoreService from "../../../firebase/FirebaseService.js";
 import MappedInputFieldsForm from "./MappedInputFieldsForm.jsx";
 
-const RecipeCreationForm = () => {
+const RecipeCreationForm = ({ selectedIngredient }) => {
   const [recipeFormData, setRecipeFormData] = useState({});
-  const [ingredients, setIngredients] = useState([{ id: Date.now() }]);
+  const [ingredients, setIngredients] = useState([
+    {
+      amount: "",
+      id: Date.now(),
+      name: "",
+      unit: "",
+    },
+  ]);
+  const [selectedIngredientData, setSelectedIngredientData] = useState(null);
+
+  useEffect(() => {
+    if (selectedIngredient) {
+      // Check if the selectedIngredient already exists in the ingredients array
+      const existingIngredient = ingredients.find(
+        (ingredient) => ingredient.id === selectedIngredient.id
+      );
+
+      if (existingIngredient) {
+        // If the selectedIngredient already exists, update its properties
+        setIngredients((prevIngredients) =>
+          prevIngredients.map((ingredient) =>
+            ingredient.id === selectedIngredient.id
+              ? selectedIngredient
+              : ingredient
+          )
+        );
+      } else {
+        // If the selectedIngredient doesn't exist, add it to the ingredients array
+        setIngredients((prevIngredients) => [
+          ...prevIngredients,
+          selectedIngredient,
+        ]);
+      }
+    }
+  }, [selectedIngredient]);
+
   const recipeFields = [
     {
       name: "cuisine",
@@ -66,19 +101,21 @@ const RecipeCreationForm = () => {
   const { user } = useAuth();
 
   const handleIngredientSubmit = (formData, id) => {
-    console.log("Ingredient Form Data:", formData);
     setIngredients((prevIngredients) =>
       prevIngredients.map((ingredient) =>
-        ingredient.id === id ? formData : ingredient,
-      ),
+        ingredient.id === id ? formData : ingredient
+      )
     );
   };
 
   const addIngredient = () => {
-    setIngredients((prevIngredients) => [
-      ...prevIngredients,
-      { id: Date.now() },
-    ]);
+    const newIngredient = {
+      amount: "",
+      id: Date.now(),
+      name: "",
+      unit: "",
+    };
+    setIngredients((prevIngredients) => [...prevIngredients, newIngredient]);
   };
 
   const removeIngredient = (id) => {
@@ -89,7 +126,7 @@ const RecipeCreationForm = () => {
     }
 
     setIngredients((prevIngredients) =>
-      prevIngredients.filter((ingredient) => ingredient.id !== id),
+      prevIngredients.filter((ingredient) => ingredient.id !== id)
     );
   };
 
@@ -105,8 +142,8 @@ const RecipeCreationForm = () => {
           ingredient.amount,
           ingredient.id,
           ingredient.name,
-          ingredient.unit,
-        ),
+          ingredient.unit
+        )
     );
 
     const recipeObject = new Recipe(
@@ -118,11 +155,8 @@ const RecipeCreationForm = () => {
       [], // instructions is an empty array for now
       recipeFormData.name,
       recipeFormData.servings,
-      recipeFormData.summary,
+      recipeFormData.summary
     );
-
-    // Write the new Recipe to the User's CustomRecipes collection
-    console.log("Recipe Object:", recipeObject);
 
     const collectionPath = `Users/${user.uid}/CustomRecipes`;
     const documentId = recipeObject.id;
@@ -132,7 +166,7 @@ const RecipeCreationForm = () => {
         collectionPath,
         documentId,
         recipeObject,
-        dataType,
+        dataType
       );
     } catch (error) {
       console.error("Error creating document:", error);
@@ -162,21 +196,27 @@ const RecipeCreationForm = () => {
         {ingredients.map((ingredient, index) => (
           <div key={index}>
             <MappedInputFieldsForm
-              fields={ingredientFields}
+              fields={ingredientFields.map((field) =>
+                field.name === "id" && ingredient.id === Date.now()
+                  ? { ...field, disabled: true }
+                  : field
+              )}
               formData={ingredient}
               onChange={(e) =>
                 setIngredients((prevIngredients) =>
                   prevIngredients.map((prevIngredient, i) =>
                     i === index
                       ? { ...prevIngredient, [e.target.name]: e.target.value }
-                      : prevIngredient,
-                  ),
+                      : prevIngredient
+                  )
                 )
               }
               onSubmit={handleIngredientSubmit}
             />
-            {/* Only render the "Remove Ingredient" button if there is more than one ingredient */}
-            {ingredients.length > 1 && (
+            {/* Only render the "Remove Ingredient" button if there is more than one ingredient 
+                or, if the current ingredient is not the initial empty ingredient */}
+            {(ingredients.length > 1 ||
+              ingredient.id !== ingredients[0].id) && (
               <button
                 type="button"
                 onClick={() => removeIngredient(ingredient.id)}
@@ -186,6 +226,33 @@ const RecipeCreationForm = () => {
             )}
           </div>
         ))}
+        {selectedIngredientData && (
+          <div id="selected-ingredient-container">
+            <h3>Selected Ingredient</h3>
+            <MappedInputFieldsForm
+              fields={ingredientFields}
+              formData={selectedIngredientData}
+              onChange={(e) =>
+                setSelectedIngredientData({
+                  ...selectedIngredientData,
+                  [e.target.name]: e.target.value,
+                })
+              }
+              onSubmit={() => {
+                if (!selectedIngredientData.id) {
+                  // If selectedIngredientData doesn't have an ID, it means it's a new ingredient
+                  addIngredient(selectedIngredientData);
+                } else {
+                  // Otherwise, it's an existing ingredient, so submit the changes
+                  handleIngredientSubmit(
+                    selectedIngredientData,
+                    selectedIngredientData.id
+                  );
+                }
+              }}
+            />
+          </div>
+        )}
         <button type="button" onClick={addIngredient}>
           Add New Ingredient
         </button>

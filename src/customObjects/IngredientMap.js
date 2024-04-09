@@ -1,4 +1,4 @@
-const ingredients = {
+const ingredientsMap = {
   2047: "iodized salt",
   4053: "lite olive oil",
   1001: "garlic butter",
@@ -2219,3 +2219,5 @@ const ingredients = {
   20013: "cooked bulgur",
   11251: "torn romaine lettuce",
 };
+
+export default ingredientsMap;
