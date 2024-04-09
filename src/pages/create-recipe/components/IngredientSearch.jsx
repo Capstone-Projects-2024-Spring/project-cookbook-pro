@@ -20,7 +20,7 @@ const IngredientSearch = () => {
   };
 
   return (
-    <div className="ingredient-search-container">
+    <div id="ingredient-search-container">
       <input
         type="text"
         value={searchQuery}

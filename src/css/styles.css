@@ -66,22 +66,28 @@
   background-color: #0056b3;
 }
 
-.recipe-creation-page {
+#recipe-creation-page {
   display: flex;
   flex-direction: row;
+  max-height: 100vh;
 }
 
-.ingredient-search-container {
+#ingredient-search-container {
   background-color: #f0f0f0;
   flex: 1;
+  max-width: fit-content;
+  overflow-y: auto;
+  max-height: calc(80vh - 40px);
+  margin-top: 10px;
 }
 
-.recipe-creation-container {
+#recipe-creation-container {
   display: flex;
   justify-content: space-between;
   padding: 20px;
   background-color: #0056b3;
   flex: 1;
+  max-width: fit-content;
 }
 
 #recipe-container {
@@ -89,6 +95,7 @@
   background-color: #aae7e0;
   padding: 20px;
   margin-right: 20px;
+  max-width: fit-content;
 }
 
 #ingredient-container {
@@ -96,10 +103,36 @@
   display: flex;
   flex-direction: column;
   background-color: #d4e8ac;
+  overflow-y: auto;
+  max-height: calc(80vh - 40px);
+  margin-top: 10px;
+  max-width: fit-content;
 }
 
 #ingredient-container > * {
   margin-top: 20px;
+}
+
+#cheeser-search {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+}
+
+#cheeser-search-box {
+  display: flex;
+  max-height: 32px;
+  order: 1;
+  max-width: fit-content;
+}
+
+#cheeser-list {
+  display: flex;
+  overflow-y: auto;
+  max-height: calc(80vh - 40px);
+  margin-top: 10px;
+  order: 2;
+  max-width: fit-content;
 }
 
 .saved-meals-container {

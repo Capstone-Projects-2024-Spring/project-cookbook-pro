@@ -18,8 +18,8 @@ const CheeserSearchComponent = ({ onIngredientSelect }) => {
   };
 
   return (
-    <div className="d-flex">
-      <div className="mr-3">
+    <div id="cheeser-search" className="d-flex">
+      <div id="cheeser-search-box" className="mr-3">
         <Input
           type="text"
           placeholder="Search ingredients..."
@@ -27,7 +27,7 @@ const CheeserSearchComponent = ({ onIngredientSelect }) => {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
-      <div>
+      <div id="cheeser-list">
         <ul className="list-unstyled">
           {filteredIngredients.map(([id, name]) => (
             <li

@@ -17,14 +17,8 @@ const CreateRecipes = () => {
         selectedIngredient={selectedIngredient}
         handleIngredientSelect={handleIngredientSelect}
       />
-      <IngredientSearch selectedIngredient={selectedIngredient} />
       <CheeserSearchComponent onIngredientSelect={handleIngredientSelect} />
-      {selectedIngredient && (
-        <div>
-          Selected ingredient: {selectedIngredient.name} (ID:{" "}
-          {selectedIngredient.id})
-        </div>
-      )}
+      <IngredientSearch selectedIngredient={selectedIngredient} />
     </div>
   );
 };
