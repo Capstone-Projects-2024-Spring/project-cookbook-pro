@@ -15,6 +15,7 @@ import PrivateRoutes from "./utils/PrivateRoutes";
 import { AuthProvider } from "./utils/AuthContext";
 import "./css/styles.css";
 import "bootstrap/dist/css/bootstrap.css";
+import GeneratedRecipes from "./pages/generated-recipes/GeneratedRecipes";
 
 function App() {
   return (
@@ -71,6 +72,14 @@ function App() {
               element={
                 <MainLayout>
                   <Calendar />
+                </MainLayout>
+              }
+            />
+            <Route
+              path="/generated-recipes"
+              element={
+                <MainLayout>
+                  <GeneratedRecipes />
                 </MainLayout>
               }
             />

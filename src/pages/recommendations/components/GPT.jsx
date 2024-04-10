@@ -50,7 +50,7 @@ const GPT = () => {
       });
       const gptModel = "gpt-4-0125-preview";
       const recipeListString = recipeNames.join(", ");
-      const systemMessageContent = `You are a recipe recommendation system... Previously saved recipes include: ${recipeListString}.`;
+      const systemMessageContent = `You are a recipe recommendation system. Do not ask any clarifying questions, only answer in this format [ { "name": "cuisine", "label": "Cuisine", "type": "text", "value":  }, { "name": "dishType", "label": "Dish Type", "type": "text", "value":  }, { "name": "id", "label": "ID", "type": "text", "placeholder": "Enter recipe ID", "value": }, { "name": "servings", "label": "Servings", "type": "number", "value": }, { "name": "summary", "label": "Summary", "type": "textarea", "value": } ], fill the values with values from your generated recipe, take in to account that the users previously saved recipes: Previously saved recipes include: ${recipeListString}.`;
       console.log(systemMessageContent); // Optional: logging for debug
 
       const userMessage = [
@@ -68,7 +68,21 @@ const GPT = () => {
       if (assistantResponse) {
         setResponse(assistantResponse.message.content);
         setResponseHistory((prevHistory) => [...prevHistory, assistantResponse.message.content]);
-        // Other Firestore operations can go here if needed
+        // Firebase document creation
+        const collectionPath = `Users/${user.uid}/generatedRecipes`;
+        const documentId = `gpt-${Date.now()}-${Math.floor(
+          Math.random() * 1000
+        )}`;
+        const gptResponse = {
+          userMessage: message,
+          assistantResponse: assistantResponse.message.content,
+        };
+        await FirestoreService.createDocument(
+          collectionPath,
+          documentId,
+          gptResponse,
+          "gptResponse"
+        );
       } else {
         throw new Error("Assistant response not found");
       }
