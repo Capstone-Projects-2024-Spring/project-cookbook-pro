@@ -66,7 +66,12 @@ const GPT = () => {
       const assistantResponse = completion.choices?.find(choice => choice.message.role === "assistant");
       if (assistantResponse) {
         setResponse(assistantResponse.message.content);
-        // Other Firestore operations can go here if needed
+        await FirestoreService.createDocument(
+          collectionPath,
+          documentId,
+          gptResponse,
+          "gptResponse"
+        );
       } else {
         throw new Error("Assistant response not found");
       }
