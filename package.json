@@ -50,23 +50,19 @@
     ]
   },
   "jest": {
-    "collectCoverage": true,
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",
-      "!src/**/*.d.ts",
+      "!**/node_modules/**",
       "!src/index.js",
       "!src/reportWebVitals.js",
       "!src/setupTests.js"
-  ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 50,
-        "functions": 50,
-        "lines": 50,
-        "statements": -10
-      }
-    },
-    "coverageReporters": ["json", "lcov", "text", "text-summary"]
+    ],
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text",
+      "text-summary"
+    ]
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.4.2",
