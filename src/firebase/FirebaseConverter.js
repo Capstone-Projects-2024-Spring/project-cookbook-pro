@@ -166,7 +166,6 @@ class FirebaseConverter {
           id: meal.id,
           autoAddToCart: meal.autoAddToCart,
           addToCartTime: meal.addToCartTime,
-          mealNumber: index + 1,
         }));
 
         return {
@@ -182,7 +181,6 @@ class FirebaseConverter {
               id: meal.id,
               autoAddToCart: meal.autoAddToCart,
               addToCartTime: meal.addToCartTime,
-              mealNumber: meal.mealNumber,
             }))
           : [];
 

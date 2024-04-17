@@ -20,6 +20,8 @@ const MyCalendar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   //for displaying saved plans from firebase
   const firestoreListener = new FirestoreListener();
+  const [isDateSelectorVisible, setDateSelectorVisible] = useState(false);
+
 
   useEffect(() => {
     const userPlansPath = `Users/${user.uid}/Plans`;
@@ -120,6 +122,10 @@ const MyCalendar = () => {
     setIsModalOpen(false);
   };
 
+  const handleCheckboxClick = () => {
+    setDateSelectorVisible(!isDateSelectorVisible);
+  };
+
   return (
     <div className="calendar-container">
       <Calendar
@@ -144,7 +150,7 @@ const MyCalendar = () => {
           );
         }}
         //greying out past dates
-        tileClassName={({ date, view }) => {
+        tileClassName={({ date }) => {
           //splits the strings and compares only the dates (so that current day isn't greyed)
           if (
             date.toISOString().split("T")[0] <
@@ -194,6 +200,16 @@ const MyCalendar = () => {
         <button className="add-meal-btn" onClick={openModal}>
           Add Meal
         </button>
+        <label className="add-order-btn">
+          Enable Order {' '}
+          <input type="checkbox" onClick={handleCheckboxClick} />
+        </label>
+        {isDateSelectorVisible && (
+          <>
+            <input type="date" min={new Date().toISOString().split('T')[0]} />
+            <button>Set Order</button>
+          </>
+        )}
       </div>
     </div>
   );
