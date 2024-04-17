@@ -4,7 +4,7 @@
   "description": "<div align=\"center\">",
   "main": "index.js",
   "scripts": {
-    "test": "react-scripts test --env=jsdom",
+    "test": "react-scripts test --coverage",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
@@ -49,8 +49,30 @@
       "last 1 safari version"
     ]
   },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}",
+      "!src/**/*.d.ts",
+      "!src/index.js",
+      "!src/reportWebVitals.js",
+      "!src/setupTests.js"
+  ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 50,
+        "functions": 50,
+        "lines": 50,
+        "statements": -10
+      }
+    },
+    "coverageReporters": ["json", "lcov", "text", "text-summary"]
+  },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.4.2",
+    "@testing-library/react": "^15.0.2",
     "css-loader": "^6.10.0",
+    "jest": "^29.7.0",
     "style-loader": "^3.3.4"
   }
 }
