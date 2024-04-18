@@ -49,26 +49,14 @@
       "last 1 safari version"
     ]
   },
-  "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}",
-      "!**/node_modules/**",
-      "!src/index.js",
-      "!src/reportWebVitals.js",
-      "!src/setupTests.js"
-    ],
-    "coverageReporters": [
-      "json",
-      "lcov",
-      "text",
-      "text-summary"
-    ]
-  },
   "devDependencies": {
+    "@babel/plugin-syntax-jsx": "^7.24.1",
+    "@babel/preset-react": "^7.24.1",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^15.0.2",
     "css-loader": "^6.10.0",
     "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
     "style-loader": "^3.3.4"
   }
 }
