@@ -30,7 +30,13 @@ const GPT = () => {
       const processedRecipes = responseObject.recipes.map((recipe) => {
         const processedIngredients = recipe.ingredients.map(
           (ingredientString) => {
-            const [amount, , name, unit] = ingredientString.split(", ");
+            const splitIngredient = ingredientString.split(", ");
+            if (splitIngredient.length < 4) {
+              // Handle the case where the ingredient string doesn't have the expected format
+              return null;
+            }
+
+            const [amount, , name, unit] = splitIngredient;
             const amountValue = parseFloat(
               amount.replace("amount(", "").replace(")", "")
             );
@@ -111,7 +117,7 @@ const GPT = () => {
         { role: "system", content: systemMessageContent },
         {
           role: "user",
-          content: `Generate five ${recipeType} recipes inspired by the following: ${recipeListString} give your response in a nested JSON containing the five generated recipes`,
+          content: `Generate four ${recipeType} recipes inspired by the following: ${recipeListString} give your response in a nested JSON containing the four generated recipes`,
         },
       ];
 

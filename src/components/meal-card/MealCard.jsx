@@ -54,6 +54,8 @@ const MealCard = ({ meal }) => {
   };
 
   const width = { width: "18rem" };
+  const height = { wh: "18rem" };
+
 
   const cardStyle = {
     border: "2px outset #FFA6A6",
@@ -91,21 +93,20 @@ const MealCard = ({ meal }) => {
 
   return (
     <Card
-      className={"m-2 p-3 flex-fill shadow-sm"}
+      className={"card-color m-2 p-3 flex-fill shadow-sm"}
       style={Object.assign(width, cardStyle, minWidth)}
     >
       <CardTitle>
-        <h5 className="text-truncate m-2 p-0">{meal.name}</h5>
+        <h5 className="meal-title text-truncate m-2 p-0">{meal.name}</h5>
       </CardTitle>
       <CardImg
-        className="m-0 border"
+        className="m-0 imageBorder"
         src={meal.image}
         alt={`${meal.name} image`}
       />
       <CardBody>
         <Button
-          className="card-button"
-          color="primary"
+          className="secondary-color card-button"
           onClick={() => {
             setSelectedMeal({ ...meal });
           }}
@@ -124,7 +125,7 @@ const MealCard = ({ meal }) => {
         {user && (
           <>
             <Button
-              className={`card-button ${isSavedClicked ? "clicked" : ""}`}
+              className={`thirdary-color card-button ${isSavedClicked ? "clicked" : ""}`}
               onClick={() => {
                 savedClick();
                 saveData(
@@ -144,7 +145,7 @@ const MealCard = ({ meal }) => {
             </Button>
 
             <Button
-              className={`card-button ${isClicked ? "clicked" : ""}`}
+              className={`primary-color card-button ${isClicked ? "clicked" : ""}`}
               onClick={() => {
                 cartClick();
                 saveData(

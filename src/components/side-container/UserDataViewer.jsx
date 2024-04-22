@@ -34,14 +34,14 @@ const UserDataViewer = () => {
           ? `${user.displayName.split(" ")[0]}'s Recipes`
           : "Your Saved Recipes"}
       </h4>
-      <ToggleContainer>
-        <ToggleButton
+      <ToggleContainer >
+        <ToggleButton id="toggle-button-custom"
           active={currentCollection === "custom" ? "true" : undefined}
           onClick={() => toggleCollection("custom")}
         >
           Custom
         </ToggleButton>
-        <ToggleButton
+        <ToggleButton id="toggle-button-saved"
           active={currentCollection === "saved" ? "true" : undefined}
           onClick={() => toggleCollection("saved")}
         >

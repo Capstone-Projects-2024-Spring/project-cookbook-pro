@@ -1,5 +1,5 @@
 import React from "react";
-import GeneratedRecipeItem from "./GeneratedRecipeItem";
+import GeneratedMealCard from "./GeneratedMealCard";
 
 const GptResponseRenderer = ({ response, loading }) => {
   return (
@@ -15,7 +15,7 @@ const GptResponseRenderer = ({ response, loading }) => {
         )}
         {Array.isArray(response?.recipes) &&
           response.recipes.map((recipe, index) => (
-            <GeneratedRecipeItem key={index} recipe={recipe} />
+            <GeneratedMealCard key={index} recipe={recipe} />
           ))}
       </div>
     </div>

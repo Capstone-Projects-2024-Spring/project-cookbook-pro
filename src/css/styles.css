@@ -1,20 +1,43 @@
+@import url("//fonts.googleapis.com/css2?family=Quicksand");
+
 :root {
-  --space-cadet: #1b264f;
-  --burgundy: #8b2731;
-  --salmon: #fb7d6f;
-  --moonstone: #52b9cb;
-  --straw: #d2dd6e;
+  --maize: #ffb35d;
+  --light-yellow: #fddabc;
+  --yellow: #ffe75dff;
+  --yello-lighter: #fdf3bc;
+  --atomic-tangerine: #ff934fff;
+  --atomic-tangerine-very-light: #F2E3D5;
+  --atomic-tangerine-darker: #cb6728;
+  --atomic-tangerine-2: #b9622b;
+  --atomic-tangerine-2-darker: #914d23;
+  --cerise: #d24970ff;
+  --light-pink: #e387a1;
+  --light-pink-darker: #d26483;
+  --paynes-gray: #32657cff;
+  --air-superiority-blue: #669bb7ff;
+  --air-superiority-blue-lighter: #a9c6d6;
+  --air-superiority-blue-lighter-lighter: #9bcae3;
+  --air-superiority-blue-darker: #375463;
+  --orange-grey: #80726a;
+  --orange-grey-darker: #65574f;
+  --white: #F0F9F9;
+  --white-darker: #898989;
   overflow-y: hidden;
+}
+
+*{
+  font-family: Quicksand;
 }
 
 #root {
   margin: 0;
   padding: 0;
   min-height: 100vh;
+  background-color: var(--white);
 }
 
 .content-container {
-  background-color: aliceblue;
+  background-color: var(--white);
   min-height: 90vh;
 }
 
@@ -43,8 +66,10 @@
 }
 
 .header {
-  background-color: var(--moonstone);
-  color: var(--space-cadet);
+  background-color: var(--white);
+  border-bottom: 10px solid;
+  border-style: groove;
+  border-bottom-color: var(--air-superiority-blue);
   padding: 1%;
   display: flex;
   justify-content: space-between;
@@ -54,9 +79,17 @@
 }
 
 #header-logo {
-  color: #fff;
-  text-decoration: none;
-  font-size: 20px;
+  color: var(--air-superiority-blue);
+  text-decoration:none;
+  font-size: 2.5rem;
+  font-weight: 600;
+  transition: font-size 1s;
+  
+}
+
+#header-logo:hover {
+  font-size: 2.6rem;
+  transition: font-size 1s;
 }
 
 .links--wrapper {
@@ -66,23 +99,64 @@
 }
 
 .header--link {
-  color: #fff;
+  color: var(--air-superiority-blue);
   text-decoration: none;
   font-size: 16px;
+  border-radius: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  font-weight: 500;
+  transition: background-color 1s;
+}
+
+.header--link:hover {
+  color: var(--white);
+  background-color: var(--air-superiority-blue);
+  border-radius: 4px;
+  transition: background-color 1s;
+}
+
+#toggle-button-custom {
+  background-color: var(--air-superiority-blue-darker) !important;
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+  border: 3px solid var(--air-superiority-blue-darker);
+  border-right: transparent;  
+  transition: background-color 0.5s;
+  color: var(--white)
+}
+
+#toggle-button-saved {
+  background-color: var(--air-superiority-blue-darker) !important;
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  border: 3px solid var(--air-superiority-blue-darker);
+  border-left: transparent;
+  transition: background-color 0.5s;
+  color: var(--white)
+}
+
+#toggle-button-saved:hover {
+  background-color: var(--air-superiority-blue) !important;
+}
+
+#toggle-button-custom:hover {
+  background-color: var(--air-superiority-blue) !important;
 }
 
 .btn {
-  background-color: #007bff;
-  color: #fff;
+  background-color: var(--atomic-tangerine);
+  color: var(--atomic-tangerine);
   padding: 8px 16px;
   border: none;
   cursor: pointer;
   font-size: 16px;
+  font-weight: 600;
   text-decoration: none;
 }
 
 .btn:hover {
-  background-color: #0056b3;
+  background-color: var(--atomic-tangerine-darker);
 }
 
 #ingredient-search-container {
@@ -104,7 +178,7 @@
 }
 
 .cart-button {
-  background-color: black;
+  background-color: var(--paynes-gray);
   color: #fff;
   padding: 8px 16px;
   border: none;
@@ -268,7 +342,7 @@
 }
 
 .cart-date button {
-  background-color: blue;
+  background-color: var(--atomic-tangerine);
   color: #fff;
   padding: 8px 16px;
   border: none;
@@ -279,7 +353,7 @@
 }
 
 .cart-date button:hover {
-  background-color: darkblue;
+  background-color: var(--atomic-tangerine-darker);
 }
 
 .cart-date input {
@@ -303,7 +377,7 @@
 }
 
 .details-button {
-  background-color: blue;
+  background-color: var(--atomic-tangerine);
   color: #fff;
   padding: 8px 16px;
   border: none;
@@ -314,7 +388,7 @@
 }
 
 .details-button:hover {
-  background-color: darkblue;
+  background-color: var(--atomic-tangerine-darker);
 }
 
 .main-container {
@@ -326,7 +400,14 @@
 
 .sidebar-container {
   width: 20%;
-  background-color: #f0f0f0;
+  background-color: var(--air-superiority-blue);
+  border-right: 10px solid;
+  border-top: 0;
+  border-left: 0;
+  border-bottom: 0;
+  border-style: groove;
+  border-color: var(--air-superiority-blue);
+  border-top-right-radius: 2rem ;
   padding: 20px;
   overflow: hidden;
   max-height: 100vh;
@@ -410,4 +491,61 @@
 
 #user-data-viewer-label {
   text-align: center;
+  font-size: 35px;
+  color: var(--white);
+  font-weight:600;
+}
+
+.primary-color {
+  background-color: var(--atomic-tangerine) !important;
+  border-color: var(--atomic-tangerine) !important;
+}
+
+.primary-color:hover {
+  background-color: var(--atomic-tangerine-darker) !important;
+  border-color: var(--atomic-tangerine-darker) !important;
+}
+
+.meal-title {
+  color: var(--white);
+  font-weight: 700;
+  font-size: 1.4rem;
+}
+
+.card-color {
+  background-color: var(--air-superiority-blue-lighter) !important;
+  /* border: 0rem transparent solid !important; */
+  /* var(--air-superiority-blue-lighter) !important; */
+  border-color: var(--white) !important;
+  border-style: groove;
+  border-width: 0.4rem !important;;
+  /* background-image: linear-gradient(to top, transparent, var(--air-superiority-blue)); */
+  border-radius: 1rem !important;
+}
+
+.imageBorder {
+  border: 0.3rem solid var(--white) !important;
+  border-radius: 0.4rem !important;
+  /* border-color: var(--cerise) !important;
+  border-width: thin medium !important; */
+}
+
+.secondary-color {
+  background-color: var(--orange-grey) !important;
+  border-color: var(--orange-grey) !important;
+}
+
+.secondary-color:hover {
+  background-color: var(--orange-grey-darker) !important;
+  border-color: var(--orange-grey-darker) !important;
+}
+
+.thirdary-color {
+  background-color: var(--atomic-tangerine-darker) !important;
+  border-color: var(--atomic-tangerine-darker) !important;
+}
+
+.thirdary-color:hover {
+  background-color: var(--atomic-tangerine-2-darker) !important;
+  border-color: var(--atomic-tangerine-2-darker) !important;
 }

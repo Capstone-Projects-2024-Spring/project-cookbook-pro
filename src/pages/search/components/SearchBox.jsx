@@ -13,6 +13,8 @@ import {
 } from "reactstrap";
 
 import SearchBoxFilter from "./SearchBoxFilter.jsx";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 const mealDataManager = new MealDataManager();
 
@@ -103,8 +105,8 @@ const SearchBox = ({ onSearch, query, setQuery }) => {
         onKeyDown={(e) => e.key === "Enter" && handleSearch()}
       />
 
-      <Button color="primary" onClick={handleSearch}>
-        Search🔍
+      <Button className="primary-color" onClick={handleSearch}>
+        Search <FontAwesomeIcon icon={faSearch}></FontAwesomeIcon>
       </Button>
     </InputGroup>
   );
