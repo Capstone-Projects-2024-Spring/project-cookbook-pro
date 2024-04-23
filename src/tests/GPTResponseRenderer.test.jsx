@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import GptResponseRenderer from "../pages/recommendations/components/GptResponseRenderer";
-
+//
 jest.mock("../pages/recommendations/components/GeneratedMealCard", () => () => (
   <div>Mocked GeneratedMealCard</div>
 ));

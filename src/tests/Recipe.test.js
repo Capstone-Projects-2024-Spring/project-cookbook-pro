@@ -43,4 +43,21 @@ describe("Recipe", () => {
       "Test Cuisine, Test Dish Type, 1, test.jpg, ingredient1,ingredient2, Test Instructions, Test Recipe, 4, Test Summary"
     );
   });
+
+  test("should set isSaved property to true", () => {
+    const recipe = new Recipe(
+      "Test Cuisine",
+      "Test Dish Type",
+      1,
+      "test.jpg",
+      ["ingredient1", "ingredient2"],
+      "Test Instructions",
+      "Test Recipe",
+      4,
+      "Test Summary"
+    );
+
+    recipe.isSaved = true;
+    expect(recipe.isSaved).toBe(true);
+  });
 });

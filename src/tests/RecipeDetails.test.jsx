@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import RecipeDetails from "../components/RecipeDetails";
-
+//
 // Mock the reactstrap components
 jest.mock("reactstrap", () => ({
   Button: ({ children }) => <button>{children}</button>,

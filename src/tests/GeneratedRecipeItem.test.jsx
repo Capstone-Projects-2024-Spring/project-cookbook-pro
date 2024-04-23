@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import GeneratedRecipeItem from "../pages/recommendations/components/GeneratedRecipeItem";
-
+//
 describe("GeneratedRecipeItem", () => {
   const recipe = {
     name: "Test Recipe",

@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import GeneratedMealCard from "../pages/recommendations/components/GeneratedMealCard";
-
+//
 jest.mock("openai", () => ({
   OpenAI: jest.fn().mockImplementation(() => ({
     images: {

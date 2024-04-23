@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -136,16 +136,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -155,12 +153,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -194,14 +194,14 @@ import {
  * @param {Recipe} meal
  * @returns
  */
-const RecipeDetails = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> meal, buttonOptions, isOpen }) =&gt; {</span>
-  const filteredMeal = <span class="cstat-no" title="statement not covered" >{ ...meal };</span>
-<span class="cstat-no" title="statement not covered" >  delete filteredMeal.summary;</span>
-<span class="cstat-no" title="statement not covered" >  delete filteredMeal.isSaved;</span>
-<span class="cstat-no" title="statement not covered" >  delete filteredMeal.image;</span>
-<span class="cstat-no" title="statement not covered" >  delete filteredMeal.instructions;</span>
+const RecipeDetails = ({ meal, buttonOptions, isOpen }) =&gt; {
+  const filteredMeal = { ...meal };
+  delete filteredMeal.summary;
+  delete filteredMeal.isSaved;
+  delete filteredMeal.image;
+  delete filteredMeal.instructions;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;Modal isOpen={isOpen} style={{ maxWidth: "18rem" }}&gt;
       &lt;ModalHeader&gt;{meal.name}&lt;/ModalHeader&gt;
       &lt;ModalBody&gt;
@@ -212,13 +212,13 @@ const RecipeDetails = <span class="cstat-no" title="statement not covered" ><spa
             style={{ maxWidth: "100%", maxHeight: "200px" }}
           /&gt;
         &lt;/Container&gt;
-        {Object.entries(filteredMeal).map(<span class="fstat-no" title="function not covered" >([</span>key, value]) =&gt;
-<span class="cstat-no" title="statement not covered" >          key === "ingredients" ? (</span>
+        {Object.entries(filteredMeal).map(([key, value]) =&gt;
+          key === "ingredients" ? (
             &lt;div key={key}&gt;
               &lt;strong&gt;{key}:&lt;/strong&gt;
               &lt;ul&gt;
-                {value.map(<span class="fstat-no" title="function not covered" >(i</span>ngredient, index) =&gt; (
-<span class="cstat-no" title="statement not covered" >                  &lt;li key={index}&gt;</span>
+                {value.map((ingredient, index) =&gt; (
+                  &lt;li key={index}&gt;
                     {ingredient.amount} {ingredient.unit} {ingredient.name}
                   &lt;/li&gt;
                 ))}
@@ -244,7 +244,7 @@ export default RecipeDetails;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-18T14:24:35.610Z
+                at 2024-04-23T22:23:19.296Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
