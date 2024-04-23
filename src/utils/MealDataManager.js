@@ -47,25 +47,25 @@ class MealDataManager {
       const data = await response.json();
       const searchResultsList = data.results.map((recipe) => {
         // Parse each ingredient to fit out custom ingredient object
-        const mappedIngredients = recipe.extendedIngredients.map(
-          (ingredient) => {
-            const ing = new Ingredient(
-              ingredient.amount,
-              ingredient.id,
-              ingredient.nameClean ? ingredient.nameClean : ingredient.name,
-              ingredient.unit
-            );
-            return ing;
-          }
-        );
+        const mappedIngredients = recipe.extendedIngredients
+          ? recipe.extendedIngredients.map((ingredient) => {
+              const ing = new Ingredient(
+                ingredient.amount,
+                ingredient.id,
+                ingredient.nameClean ? ingredient.nameClean : ingredient.name,
+                ingredient.unit
+              );
+              return ing;
+            })
+          : [];
 
         const mappedResult = new Recipe(
-          recipe.cuisines,
-          recipe.dishTypes,
+          recipe.cuisines || [],
+          recipe.dishTypes || [],
           recipe.id,
           recipe.image,
           mappedIngredients,
-          recipe.analyzedInstructions,
+          recipe.analyzedInstructions || [],
           recipe.title,
           recipe.servings,
           recipe.summary
