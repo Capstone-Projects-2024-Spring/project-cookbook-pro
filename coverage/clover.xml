@@ -1,28 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1713911534307" clover="3.2.0">
-  <project timestamp="1713911534307" name="All files">
-    <metrics statements="75" coveredstatements="72" conditionals="21" coveredconditionals="19" methods="22" coveredmethods="20" elements="118" coveredelements="111" complexity="0" loc="75" ncloc="75" packages="4" files="7" classes="7"/>
-    <package name="components">
-      <metrics statements="9" coveredstatements="9" conditionals="2" coveredconditionals="2" methods="3" coveredmethods="3"/>
-      <file name="RecipeDetails.jsx" path="C:\Users\shawn\Projects\Temple\project-cookbook-pro\src\components\RecipeDetails.jsx">
-        <metrics statements="9" coveredstatements="9" conditionals="2" coveredconditionals="2" methods="3" coveredmethods="3"/>
-        <line num="16" count="2" type="stmt"/>
-        <line num="17" count="5" type="stmt"/>
-        <line num="18" count="5" type="stmt"/>
-        <line num="19" count="5" type="stmt"/>
-        <line num="20" count="5" type="stmt"/>
-        <line num="21" count="5" type="stmt"/>
-        <line num="23" count="5" type="stmt"/>
-        <line num="35" count="20" type="cond" truecount="2" falsecount="0"/>
-        <line num="40" count="10" type="stmt"/>
+<coverage generated="1713914685869" clover="3.2.0">
+  <project timestamp="1713914685869" name="All files">
+    <metrics statements="72" coveredstatements="70" conditionals="15" coveredconditionals="14" methods="24" coveredmethods="23" elements="111" coveredelements="107" complexity="0" loc="72" ncloc="72" packages="6" files="11" classes="11"/>
+    <package name="src">
+      <metrics statements="3" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <file name="App.jsx" path="C:\Users\shawn\Projects\Temple\project-cookbook-pro\src\App.jsx">
+        <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="19" count="0" type="stmt"/>
+      </file>
+      <file name="index.js" path="C:\Users\shawn\Projects\Temple\project-cookbook-pro\src\index.js">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
       </file>
     </package>
-    <package name="customObjects">
-      <metrics statements="13" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="4"/>
+    <package name="src.components.side-container">
+      <metrics statements="2" coveredstatements="2" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+      <file name="EmptyCollectionMessage.jsx" path="C:\Users\shawn\Projects\Temple\project-cookbook-pro\src\components\side-container\EmptyCollectionMessage.jsx">
+        <metrics statements="2" coveredstatements="2" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="2" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.customObjects">
+      <metrics statements="18" coveredstatements="18" conditionals="0" coveredconditionals="0" methods="9" coveredmethods="9"/>
+      <file name="GoalForm.js" path="C:\Users\shawn\Projects\Temple\project-cookbook-pro\src\customObjects\GoalForm.js">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+      </file>
       <file name="Ingredient.js" path="C:\Users\shawn\Projects\Temple\project-cookbook-pro\src\customObjects\Ingredient.js">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="3" count="2" type="stmt"/>
         <line num="10" count="1" type="stmt"/>
+      </file>
+      <file name="Plan.js" path="C:\Users\shawn\Projects\Temple\project-cookbook-pro\src\customObjects\Plan.js">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="8" count="3" type="stmt"/>
       </file>
       <file name="Recipe.js" path="C:\Users\shawn\Projects\Temple\project-cookbook-pro\src\customObjects\Recipe.js">
         <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
@@ -39,40 +55,39 @@
         <line num="25" count="1" type="stmt"/>
       </file>
     </package>
-    <package name="pages.recommendations.components">
-      <metrics statements="21" coveredstatements="18" conditionals="8" coveredconditionals="7" methods="9" coveredmethods="7"/>
-      <file name="GeneratedMealCard.jsx" path="C:\Users\shawn\Projects\Temple\project-cookbook-pro\src\pages\recommendations\components\GeneratedMealCard.jsx">
-        <metrics statements="15" coveredstatements="12" conditionals="4" coveredconditionals="3" methods="5" coveredmethods="3"/>
-        <line num="6" count="1" type="stmt"/>
-        <line num="7" count="8" type="stmt"/>
-        <line num="8" count="8" type="stmt"/>
-        <line num="9" count="8" type="stmt"/>
-        <line num="11" count="8" type="stmt"/>
-        <line num="14" count="8" type="stmt"/>
-        <line num="19" count="8" type="stmt"/>
-        <line num="20" count="3" type="stmt"/>
-        <line num="21" count="3" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
-        <line num="34" count="3" type="stmt"/>
-        <line num="38" count="8" type="stmt"/>
-        <line num="62" count="2" type="stmt"/>
-      </file>
-      <file name="GeneratedRecipeItem.jsx" path="C:\Users\shawn\Projects\Temple\project-cookbook-pro\src\pages\recommendations\components\GeneratedRecipeItem.jsx">
-        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
-        <line num="3" count="1" type="stmt"/>
-        <line num="4" count="1" type="stmt"/>
-        <line num="20" count="2" type="stmt"/>
-      </file>
-      <file name="GptResponseRenderer.jsx" path="C:\Users\shawn\Projects\Temple\project-cookbook-pro\src\pages\recommendations\components\GptResponseRenderer.jsx">
-        <metrics statements="3" coveredstatements="3" conditionals="4" coveredconditionals="4" methods="2" coveredmethods="2"/>
-        <line num="4" count="1" type="stmt"/>
-        <line num="5" count="3" type="stmt"/>
-        <line num="18" count="2" type="stmt"/>
+    <package name="src.pages.calendar.components">
+      <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <file name="NutritionModal.jsx" path="C:\Users\shawn\Projects\Temple\project-cookbook-pro\src\pages\calendar\components\NutritionModal.jsx">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="3" type="stmt"/>
       </file>
     </package>
-    <package name="utils">
+    <package name="src.pages.create-recipe.components">
+      <metrics statements="15" coveredstatements="14" conditionals="2" coveredconditionals="2" methods="6" coveredmethods="6"/>
+      <file name="IngredientSearch.jsx" path="C:\Users\shawn\Projects\Temple\project-cookbook-pro\src\pages\create-recipe\components\IngredientSearch.jsx">
+        <metrics statements="12" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="4"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="5" type="stmt"/>
+        <line num="7" count="5" type="stmt"/>
+        <line num="9" count="5" type="stmt"/>
+        <line num="11" count="5" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="23" count="5" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="33" count="2" type="stmt"/>
+      </file>
+      <file name="MappedInputFieldsForm.jsx" path="C:\Users\shawn\Projects\Temple\project-cookbook-pro\src\pages\create-recipe\components\MappedInputFieldsForm.jsx">
+        <metrics statements="3" coveredstatements="3" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="4" type="stmt"/>
+        <line num="8" count="8" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.utils">
       <metrics statements="32" coveredstatements="32" conditionals="11" coveredconditionals="10" methods="6" coveredmethods="6"/>
       <file name="MealDataManager.js" path="C:\Users\shawn\Projects\Temple\project-cookbook-pro\src\utils\MealDataManager.js">
         <metrics statements="32" coveredstatements="32" conditionals="11" coveredconditionals="10" methods="6" coveredmethods="6"/>

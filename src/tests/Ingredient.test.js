@@ -1,5 +1,5 @@
 import { Ingredient } from "../customObjects/Ingredient";
-//
+
 describe("Ingredient", () => {
   test("should create an instance of Ingredient with correct properties", () => {
     const ingredient = new Ingredient(1, 1, "Test Ingredient", "unit");
