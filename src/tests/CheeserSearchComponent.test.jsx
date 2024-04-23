@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import CheeserSearchComponent from "./CheeserSearchComponent";
+import CheeserSearchComponent from "./CheeserSearchComponent.test";
 import ingredientsMap from "../../../customObjects/IngredientMap";
 
 describe("CheeserSearchComponent", () => {
