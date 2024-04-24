@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Card, CardBody, CardTitle, CardImg, Modal, ModalHeader, ModalBody } from "reactstrap";
 import RecipeDetails from "../../../components/RecipeDetails.jsx";
 import OpenAI from "openai";
@@ -35,6 +35,11 @@ const GeneratedMealCard = ({ recipe }) => {
     }
   };
 
+  // Effect to automatically generate image when component mounts
+  useEffect(() => {
+    generateDalleImage();
+  }, []);
+
   return (
     <div className="meal-card">
       <div className="meal-card-content">
@@ -63,9 +68,6 @@ const GeneratedMealCard = ({ recipe }) => {
           Details
         </Button>
         <Button className="meal-card-button" color="success">Save</Button>
-        <Button className="meal-card-button" color="info" onClick={generateDalleImage}>
-          Generate DALL-E Image
-        </Button>
         <div className="meal-card-reasoning">{recipe.inspirationReasoning}</div>
         {selectedMeal && (
           <RecipeDetails
