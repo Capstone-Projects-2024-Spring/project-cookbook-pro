@@ -1,9 +1,9 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import CheeserSearchComponent from "./CheeserSearchComponent.test";
-import ingredientsMap from "../../../customObjects/IngredientMap";
+import CheeserSearchComponent from "../pages/create-recipe/components/CheeserSearchComponent";
+import ingredientsMap from "../customObjects/IngredientMap";
 import "@testing-library/jest-dom";
-
+//
 describe("CheeserSearchComponent", () => {
   test("renders search input and filters ingredients based on search term", () => {
     const onIngredientSelect = jest.fn();
@@ -15,10 +15,10 @@ describe("CheeserSearchComponent", () => {
     expect(searchInput).toBeInTheDocument();
 
     fireEvent.change(searchInput, { target: { value: "appl" } });
-    expect(screen.getByText("Apple")).toBeInTheDocument();
+    expect(screen.getAllByRole("listitem", { name: /.*/i })).toHaveLength(30);
 
-    fireEvent.change(searchInput, { target: { value: "bana" } });
-    expect(screen.getByText("Banana")).toBeInTheDocument();
+    fireEvent.change(searchInput, { target: { value: "pineappl" } });
+    expect(screen.getAllByRole("listitem", { name: /.*/i })).toHaveLength(9);
   });
 
   test("calls onIngredientSelect when an ingredient is clicked", () => {
@@ -30,10 +30,16 @@ describe("CheeserSearchComponent", () => {
     );
     fireEvent.change(searchInput, { target: { value: "appl" } });
 
-    fireEvent.click(screen.getByText("Apple"));
+    const listItems = screen.getAllByRole("listitem");
+    const firstAppleItem = listItems.find((item) =>
+      item.textContent.toLowerCase().includes("appl")
+    );
+
+    fireEvent.click(firstAppleItem);
+
     expect(onIngredientSelect).toHaveBeenCalledWith({
       id: expect.any(String),
-      name: "Apple",
+      name: "honey crisp apples",
     });
   });
 
