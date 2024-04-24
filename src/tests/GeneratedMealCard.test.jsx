@@ -1,7 +1,8 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import GeneratedMealCard from "../pages/recommendations/components/GeneratedMealCard";
-//
+import OpenAI from "openai";
+
 jest.mock("openai", () => ({
   OpenAI: jest.fn().mockImplementation(() => ({
     images: {
@@ -39,23 +40,14 @@ describe("GeneratedMealCard", () => {
     expect(screen.getByText("Test reasoning")).toBeInTheDocument();
   });
 
-  test("opens modal when image is clicked", async () => {
-    render(<GeneratedMealCard recipe={recipe} />);
-
-    fireEvent.click(screen.getByText("Generate DALL-E Image"));
-    await waitFor(() =>
-      expect(screen.getByAltText("Generated Recipe Image")).toBeInTheDocument()
-    );
-
-    fireEvent.click(screen.getByAltText("Generated Recipe Image"));
-    expect(screen.getByAltText("Full-size Recipe Image")).toBeInTheDocument();
-  });
-
-  test("opens recipe details when details button is clicked", () => {
+  test("opens and closes recipe details when details button is clicked", () => {
     render(<GeneratedMealCard recipe={recipe} />);
 
     fireEvent.click(screen.getByText("Details"));
     expect(screen.getByText("Close")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText("Close"));
+    expect(screen.queryByText("Close")).not.toBeInTheDocument();
   });
 
   test("generates DALL-E image when button is clicked", async () => {
@@ -67,7 +59,7 @@ describe("GeneratedMealCard", () => {
     );
   });
 
-  test("closes modal when close button is clicked", async () => {
+  test("opens modal when image is clicked and closes it when close button is clicked", async () => {
     render(<GeneratedMealCard recipe={recipe} />);
 
     fireEvent.click(screen.getByText("Generate DALL-E Image"));
@@ -84,13 +76,60 @@ describe("GeneratedMealCard", () => {
     ).not.toBeInTheDocument();
   });
 
-  test("closes recipe details when close button is clicked", () => {
+  test("does not render image and modal when image URL is not available", () => {
     render(<GeneratedMealCard recipe={recipe} />);
 
-    fireEvent.click(screen.getByText("Details"));
-    expect(screen.getByText("Close")).toBeInTheDocument();
+    expect(
+      screen.queryByAltText("Generated Recipe Image")
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByAltText("Full-size Recipe Image")
+    ).not.toBeInTheDocument();
+  });
 
-    fireEvent.click(screen.getByText("Close"));
-    expect(screen.queryByText("Close")).not.toBeInTheDocument();
+  test("handles error when generating DALL-E image fails", async () => {
+    const consoleSpy = jest.spyOn(console, "error").mockImplementation();
+    jest
+      .spyOn(OpenAI.prototype.images, "generate")
+      .mockRejectedValueOnce(new Error("Generation failed"));
+
+    render(<GeneratedMealCard recipe={recipe} />);
+
+    fireEvent.click(screen.getByText("Generate DALL-E Image"));
+    await waitFor(() =>
+      expect(consoleSpy).toHaveBeenCalledWith(
+        "Error generating image:",
+        expect.any(Error)
+      )
+    );
+
+    consoleSpy.mockRestore();
+  });
+
+  test("saves recipe when save button is clicked", () => {
+    const saveRecipeMock = jest.fn();
+    render(<GeneratedMealCard recipe={recipe} onSave={saveRecipeMock} />);
+
+    fireEvent.click(screen.getByText("Save"));
+
+    expect(saveRecipeMock).toHaveBeenCalledTimes(1);
+    expect(saveRecipeMock).toHaveBeenCalledWith(recipe);
+  });
+
+  test("toggles modal when image is clicked", async () => {
+    render(<GeneratedMealCard recipe={recipe} />);
+
+    fireEvent.click(screen.getByText("Generate DALL-E Image"));
+    await waitFor(() =>
+      expect(screen.getByAltText("Generated Recipe Image")).toBeInTheDocument()
+    );
+
+    fireEvent.click(screen.getByAltText("Generated Recipe Image"));
+    expect(screen.getByAltText("Full-size Recipe Image")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByAltText("Generated Recipe Image"));
+    expect(
+      screen.queryByAltText("Full-size Recipe Image")
+    ).not.toBeInTheDocument();
   });
 });
