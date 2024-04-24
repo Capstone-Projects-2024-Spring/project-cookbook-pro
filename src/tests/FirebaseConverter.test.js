@@ -1,5 +1,6 @@
 import FirebaseConverter from "../firebase/FirebaseConverter";
 import { GoalForm } from "../customObjects/GoalForm";
+import "@testing-library/jest-dom";
 
 describe("FirebaseConverter", () => {
   let firebaseConverter;
@@ -20,6 +21,24 @@ describe("FirebaseConverter", () => {
       const convertedObject =
         firebaseConverter.objectConverter.toFirestore(undefined);
       expect(convertedObject).toBeNull();
+    });
+
+    test("toFirestore returns null for Recipe with missing required properties", () => {
+      const recipe = new Recipe(
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        [],
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined
+      );
+      const convertedRecipe =
+        firebaseConverter.recipeConverter.toFirestore(recipe);
+      expect(convertedRecipe).toBeNull();
     });
 
     test("fromFirestore converts Firestore snapshot to object", () => {

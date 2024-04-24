@@ -1,4 +1,5 @@
 import { Ingredient } from "../customObjects/Ingredient";
+import "@testing-library/jest-dom";
 
 describe("Ingredient", () => {
   test("should create an instance of Ingredient with correct properties", () => {

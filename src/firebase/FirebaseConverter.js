@@ -30,14 +30,14 @@ class FirebaseConverter {
 
     this.recipeConverter = {
       toFirestore: (recipe) => {
-        if (!recipe) {
-          console.error("Recipe is undefined or null");
+        if (!recipe || !recipe.id || !recipe.name) {
+          console.error("Recipe is missing required properties");
           return null;
         }
 
         const convertedIngredients = this.convertArray(
           recipe.ingredients,
-          this.objectConverter,
+          this.objectConverter
         );
 
         return {
@@ -57,7 +57,7 @@ class FirebaseConverter {
         const data = snapshot.data(options);
         const convertedIngredients = this.convertArray(
           data.ingredients,
-          this.objectConverter,
+          this.objectConverter
         );
 
         return new Recipe(
@@ -70,7 +70,7 @@ class FirebaseConverter {
           data.name,
           data.servings,
           data.summary,
-          data.isSaved,
+          data.isSaved
         );
       },
     };
@@ -84,7 +84,7 @@ class FirebaseConverter {
 
         const convertedIngredients = this.convertArray(
           order.ingredients,
-          this.objectConverter,
+          this.objectConverter
         );
 
         return {

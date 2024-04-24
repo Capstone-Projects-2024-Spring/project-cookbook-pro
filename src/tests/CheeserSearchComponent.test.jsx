@@ -2,6 +2,7 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import CheeserSearchComponent from "./CheeserSearchComponent.test";
 import ingredientsMap from "../../../customObjects/IngredientMap";
+import "@testing-library/jest-dom";
 
 describe("CheeserSearchComponent", () => {
   test("renders search input and filters ingredients based on search term", () => {

@@ -2,6 +2,7 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import IngredientSearch from "../pages/create-recipe/components/IngredientSearch";
 import MealDataManager from "../utils/MealDataManager";
+import "@testing-library/jest-dom";
 
 jest.mock("../utils/MealDataManager");
 

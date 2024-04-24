@@ -1,4 +1,5 @@
 import { GoalForm } from "../customObjects/GoalForm";
+import "@testing-library/jest-dom";
 
 describe("GoalForm", () => {
   test("should create an instance of GoalForm with correct properties", () => {

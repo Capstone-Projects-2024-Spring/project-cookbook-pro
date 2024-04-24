@@ -1,6 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import MainLayout from "../pages/MainLayout";
+import "@testing-library/jest-dom";
 
 jest.mock("../components/side-container/UserDataViewer", () => () => (
   <div>Mocked UserDataViewer</div>

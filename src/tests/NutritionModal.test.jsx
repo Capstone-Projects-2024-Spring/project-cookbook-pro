@@ -1,6 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import NutritionModal from "../pages/calendar/components/NutritionModal";
+import "@testing-library/jest-dom";
 //
 jest.mock("../pages/health/Health", () => () => (
   <div>Mocked Health Component</div>

@@ -1,6 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import Order from "../pages/order-history/components/Order";
+import "@testing-library/jest-dom";
 
 describe("Order component", () => {
   test("renders order details with recipe names and ingredients", () => {

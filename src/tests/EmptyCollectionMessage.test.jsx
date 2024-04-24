@@ -2,6 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import EmptyCollectionMessage from "../components/side-container/EmptyCollectionMessage";
+import "@testing-library/jest-dom";
 
 describe("EmptyCollectionMessage", () => {
   test("renders collection name and link when href is provided", () => {

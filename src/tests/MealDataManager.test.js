@@ -1,6 +1,7 @@
 import MealDataManager from "../utils/MealDataManager";
 import { Recipe } from "../customObjects/Recipe";
 import { Ingredient } from "../customObjects/Ingredient";
+import "@testing-library/jest-dom";
 
 jest.mock("../customObjects/Recipe");
 jest.mock("../customObjects/Ingredient");

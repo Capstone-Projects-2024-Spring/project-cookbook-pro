@@ -1,6 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import MappedInputFieldsForm from "../pages/create-recipe/components/MappedInputFieldsForm";
+import "@testing-library/jest-dom";
 
 describe("MappedInputFieldsForm", () => {
   const fields = [

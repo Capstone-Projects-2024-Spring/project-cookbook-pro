@@ -1,10 +1,11 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import GeneratedMealCard from "../pages/recommendations/components/GeneratedMealCard";
-import OpenAI from "openai";
-
+import { OpenAI } from "openai";
+import "@testing-library/jest-dom";
+//
 jest.mock("openai", () => ({
-  OpenAI: jest.fn().mockImplementation(() => ({
+  default: jest.fn().mockImplementation(() => ({
     images: {
       generate: jest.fn().mockResolvedValue({
         data: [{ url: "generated-image-url" }],
@@ -120,9 +121,12 @@ describe("GeneratedMealCard", () => {
     render(<GeneratedMealCard recipe={recipe} />);
 
     fireEvent.click(screen.getByText("Generate DALL-E Image"));
-    await waitFor(() =>
-      expect(screen.getByAltText("Generated Recipe Image")).toBeInTheDocument()
-    );
+    await waitFor(() => {
+      expect(screen.getByAltText("Generated Recipe Image")).toBeInTheDocument();
+      {
+        timeout: 5000;
+      }
+    });
 
     fireEvent.click(screen.getByAltText("Generated Recipe Image"));
     expect(screen.getByAltText("Full-size Recipe Image")).toBeInTheDocument();

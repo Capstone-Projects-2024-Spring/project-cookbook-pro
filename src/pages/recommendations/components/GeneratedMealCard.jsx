@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Button, Card, CardBody, CardTitle, CardImg, Modal, ModalHeader, ModalBody } from "reactstrap";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardTitle,
+  CardImg,
+  Modal,
+  ModalHeader,
+  ModalBody,
+} from "reactstrap";
 import RecipeDetails from "../../../components/RecipeDetails.jsx";
 import OpenAI from "openai";
 
@@ -18,20 +27,18 @@ const GeneratedMealCard = ({ recipe }) => {
 
   const generateDalleImage = async () => {
     try {
-      const openai = new OpenAI({
-        apiKey: process.env.REACT_APP_OPENAI_API_KEY,
-        dangerouslyAllowBrowser: true,
-      });
+      const openai = new OpenAI(process.env.REACT_APP_OPENAI_API_KEY);
       const response = await openai.images.generate({
-        model: "dall-e-3",
-        prompt: `Please generate a picture of ${recipe.name} that is a ${recipe.summary} in photorealistic style`,
+        prompt: `A delicious meal of ${recipe.name}`,
+        size: "256x256",
         n: 1,
-        size: "1024x1024",
       });
-      setImageURL(response.data[0].url);
-      console.log('Image generated successfully:', response.data[0].url);
+
+      if (response.data && response.data[0].url) {
+        setImageUrl(response.data[0].url);
+      }
     } catch (error) {
-      console.error('Error generating image:', error);
+      console.error("Error generating image:", error);
     }
   };
 
@@ -48,7 +55,13 @@ const GeneratedMealCard = ({ recipe }) => {
 
         {imageURL && (
           <>
-            <CardImg top width="100%" src={imageURL} alt="Generated Recipe Image" onClick={toggleModal} />
+            <CardImg
+              top
+              width="100%"
+              src={imageURL}
+              alt="Generated Recipe Image"
+              onClick={toggleModal}
+            />
             <Modal isOpen={isModalOpen} toggle={toggleModal}>
               <ModalHeader toggle={toggleModal}>{recipe.name}</ModalHeader>
               <ModalBody>
@@ -59,11 +72,21 @@ const GeneratedMealCard = ({ recipe }) => {
         )}
       </div>
       <CardBody>
-        <Button className="meal-card-button" color="primary" onClick={() => setSelectedMeal({ ...recipe })}>
+        <Button
+          className="meal-card-button"
+          color="primary"
+          onClick={() => setSelectedMeal({ ...recipe })}
+        >
           Details
         </Button>
-        <Button className="meal-card-button" color="success">Save</Button>
-        <Button className="meal-card-button" color="info" onClick={generateDalleImage}>
+        <Button className="meal-card-button" color="success">
+          Save
+        </Button>
+        <Button
+          className="meal-card-button"
+          color="info"
+          onClick={generateDalleImage}
+        >
           Generate DALL-E Image
         </Button>
         <div className="meal-card-reasoning">{recipe.inspirationReasoning}</div>

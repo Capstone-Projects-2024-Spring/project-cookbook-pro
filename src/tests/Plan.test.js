@@ -1,4 +1,5 @@
 import { Plan } from "../customObjects/Plan";
+import "@testing-library/jest-dom";
 
 describe("Plan", () => {
   test("should create an instance of Plan with correct properties", () => {

@@ -1,6 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import Home from "../pages/Home";
+import "@testing-library/jest-dom";
 
 describe("Home", () => {
   test("renders home page with correct content", () => {
