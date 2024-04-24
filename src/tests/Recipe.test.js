@@ -1,4 +1,5 @@
 import { Recipe } from "../customObjects/Recipe";
+import "@testing-library/jest-dom";
 //
 describe("Recipe", () => {
   test("should create an instance of Recipe with correct properties", () => {

@@ -1,4 +1,6 @@
 import { GoalForm } from "../customObjects/GoalForm";
+import { Recipe } from "../customObjects/Recipe";
+import { Plan } from "../customObjects/Plan";
 
 class FirebaseConverter {
   constructor() {
@@ -94,8 +96,9 @@ class FirebaseConverter {
       },
       fromFirestore: (snapshot, options) => {
         const data = snapshot.data(options);
+        const ingredients = data.ingredients || []; // Provide a default empty array if ingredients is undefined
         const convertedIngredients = this.convertArray(
-          data.ingredients,
+          ingredients,
           this.objectConverter
         );
 

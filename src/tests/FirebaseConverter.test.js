@@ -1,5 +1,7 @@
 import FirebaseConverter from "../firebase/FirebaseConverter";
 import { GoalForm } from "../customObjects/GoalForm";
+import { Recipe } from "../customObjects/Recipe";
+import { Plan } from "../customObjects/Plan";
 import "@testing-library/jest-dom";
 
 describe("FirebaseConverter", () => {
@@ -98,7 +100,7 @@ describe("FirebaseConverter", () => {
         name: "Recipe Name",
         servings: 4,
         summary: "Summary",
-        isSaved: true,
+        isSaved: false,
       });
     });
 
@@ -137,7 +139,7 @@ describe("FirebaseConverter", () => {
       expect(convertedRecipe.name).toBe("Recipe Name");
       expect(convertedRecipe.servings).toBe(4);
       expect(convertedRecipe.summary).toBe("Summary");
-      expect(convertedRecipe.isSaved).toBe(true);
+      expect(convertedRecipe.isSaved).toBe(false);
     });
   });
 
