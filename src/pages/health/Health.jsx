@@ -12,9 +12,13 @@ const Health = ({ recipes }) => {
   const mealDataManager = new MealDataManager();
 
   const [showGoals, setShowGoals] = useState(true);
-  const [nutritionData, setNutritionData] = useState(null);
-
-  console.log(recipes);
+  const [totalNutrients, setTotalNutrients] = useState({
+    calories: 0,
+    protein: 0,
+    carbs: 0,
+    fat: 0,
+    sugar: 0,
+  });
 
   useEffect(() => {
     if (user) {
@@ -35,20 +39,7 @@ const Health = ({ recipes }) => {
     }
   }, []);
 
-  const extractNutrients = (nutrients) => {
-    const extractedNutrients = nutrients
-      .filter((nutrient) =>
-        ["Calories", "Protein", "Carbohydrates", "Fat", "Sugar"].includes(
-          nutrient.name
-        )
-      )
-      .map(
-        (nutrient) => `${nutrient.name}: ${nutrient.amount} ${nutrient.unit}`
-      )
-      .join(", ");
-    return extractedNutrients;
-  };
-
+  
   const handleNutritionWidget = (id) => {
     const apiKey = "c70a0f5d5e1f4e18bb55c4bfbc94ab1c";
 
@@ -64,6 +55,15 @@ const Health = ({ recipes }) => {
         console.log(data);
         console.log(nutritionResults.toString());
         
+        // Update the total nutrients
+        setTotalNutrients((prevTotal) => ({
+          calories: prevTotal.calories + nutritionResults.calories,
+          protein: prevTotal.protein + nutritionResults.protein,
+          carbs: prevTotal.carbs + nutritionResults.carbs,
+          fat: prevTotal.fat + nutritionResults.fat,
+          sugar: prevTotal.sugar + nutritionResults.sugar
+        }));
+
         // Update the state with the nutrition data
         setNutritionData(nutritionResults);
       })
@@ -112,15 +112,15 @@ const Health = ({ recipes }) => {
         ))}
       </div>
       <br />
-        {/* Display nutrition data */}
-        {nutritionData && (
+        {/* Display total nutrients */}
+        {totalNutrients && (
         <div>
-          <h3>Nutrition Data:</h3>
-          <p>Calories: {nutritionData.calories}</p>
-          <p>Protein: {nutritionData.protein}</p>
-          <p>Carbs: {nutritionData.carbs}</p>
-          <p>Fat: {nutritionData.fat}</p>
-          <p>Sugar: {nutritionData.sugar}</p>
+          <h3>Total Nutrients:</h3>
+          <p>Calories: {totalNutrients.calories}</p>
+          <p>Protein: {totalNutrients.protein}</p>
+          <p>Carbs: {totalNutrients.carbs}</p>
+          <p>Fat: {totalNutrients.fat}</p>
+          <p>Sugar: {totalNutrients.sugar}</p>
         </div>
       )}
     </div>
