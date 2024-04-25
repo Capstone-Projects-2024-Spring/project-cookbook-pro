@@ -112,31 +112,33 @@ class MealDataManager {
     }
   }
 
-  async getRecipeNutritionById(recipeId) {
-    const searchParams = new URLSearchParams({
-      apiKey: this.spoonacularApi,
-      recipeId,
-    });
+  // async getRecipeDetailsById(recipeId) {
+  //   const searchParams = new URLSearchParams({
+  //     apiKey: this.spoonacularApi,
+  //   });
 
-    const url = `https://api.spoonacular.com/recipes/${recipeId}/nutritionWidget?${searchParams.toString()}`;
+  //   const url = `https://api.spoonacular.com/recipes/${recipeId}/nutritionWidget.json?${searchParams.toString()}`;
 
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
+  //   try {
+  //     const response = await fetch(url);
+  //     const data = await response.json();
 
-      const searchResults = data.results.map((result) => {
-        return new NutritionResults(result.calories, result.protein, result.carbs, result.fat, result.sugar);
-      });
+  //     const searchResults = data.results.map((result) => {
+  //       return new NutritionResults(
+  //         result.calories,
+  //         result.protein,
+  //         result.carbs,
+  //         result.fat,
+  //         result.sugar
+  //       );
+  //     });
+  //     return searchResults;
 
-      return {
-        results: searchResults,
-        totalResults: data.totalResults,
-      };
-    } catch (error) {
-      console.error("Error fetching Recipe nutrition details:", error);
-      throw error;
-    }
-  }
+  //   } catch (error) {
+  //     console.error("Error fetching Recipe details:", error);
+  //     throw error;
+  //   }
+  // }
 }
 
 export default MealDataManager;

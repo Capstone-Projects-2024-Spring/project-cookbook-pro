@@ -33,32 +33,52 @@ const Health = ({ recipes }) => {
     }
   }, []);
 
-  // const handleNutritionWidget = (id) => {
+  const extractNutrients = (nutrients) => {
+    const extractedNutrients = nutrients
+      .filter((nutrient) =>
+        ["Calories", "Protein", "Carbohydrates", "Fat", "Sugar"].includes(
+          nutrient.name
+        )
+      )
+      .map(
+        (nutrient) => `${nutrient.name}: ${nutrient.amount} ${nutrient.unit}`
+      )
+      .join(", ");
+    return extractedNutrients;
+  };
+
+  const handleNutritionWidget = (id) => {
+    const apiKey = "c70a0f5d5e1f4e18bb55c4bfbc94ab1c";
+
+    fetch(
+      `https://api.spoonacular.com/recipes/${id}/nutritionWidget.json?apiKey=${apiKey}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle the data from the API response
+        const nutrients = extractNutrients(data.nutrients);
+
+        console.log(data);
+        console.log(nutrients);
+      })
+      .catch((error) => {
+        // Handle any errors
+        console.error("Error:", error);
+      });
+  };
+
+  // const handleNutritionWidget = (recipeId) => {
   //   mealDataManager
-  //     .getRecipeNutritionById(id)
-  //     .then((data) => {
-  //       // API response
-  //       console.log(data);
+  //     .getRecipeDetailsById(recipeId)
+  //     .then((recipe) => {
+
+  //       console.log(recipe.nutrition);
   //     })
   //     .catch((error) => {
-  //       // Error Handling
+  //       // Handle any errors
   //       console.error("Error:", error);
   //     });
   // };
-
-  const handleNutritionWidget = (id) => {
-    const apiKey = 'c70a0f5d5e1f4e18bb55c4bfbc94ab1c'; // Replace 'YOUR_API_KEY_HERE' with your actual API key
-    fetch(`https://api.spoonacular.com/recipes/${id}/nutritionWidget.json?apiKey=${apiKey}`)
-      .then(response => response.json())
-      .then(data => {
-        // Handle the data from the API response
-        console.log(data);
-      })
-      .catch(error => {
-        // Handle any errors
-        console.error('Error:', error);
-      });
-  };
 
   return (
     <div>
@@ -72,7 +92,7 @@ const Health = ({ recipes }) => {
         </div>
       )}
       <br />
-      <div id="display-nutrition">
+      <div id="display-nutrition-goals">
         <h3>Recipes:</h3>
         {recipes.map((recipe, index) => (
           <div key={index}>

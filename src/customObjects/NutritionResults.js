@@ -1,10 +1,10 @@
 class NutritionResults {
-    constructor(calories, protein, carbs, fat, sugar) {
-      (this.calories = calories),
-        (this.protein = protein),
-        (this.carbs = carbs),
-        (this.fat = fat),
-        (this.sugar = sugar);
+    constructor(nutrientValues) {
+        this.calories = nutrientValues[0];
+        this.protein = nutrientValues[1];
+        this.carbs = nutrientValues[2];
+        this.fat = nutrientValues[3];
+        this.sugar = nutrientValues[4];
     }
     toString() {
       return (
