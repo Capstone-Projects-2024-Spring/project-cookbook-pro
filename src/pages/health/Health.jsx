@@ -4,6 +4,7 @@ import MacroGoalForm from "./components/MacroGoalForm.jsx";
 import { useAuth } from "../../utils/AuthContext.js";
 import FirestoreListener from "../../firebase/FirestoreListener.js";
 import MealDataManager from "../../utils/MealDataManager.js";
+import { NutritionResults } from "../../customObjects/NutritionResults.js";
 
 const Health = ({ recipes }) => {
   const { user } = useAuth();
@@ -11,6 +12,7 @@ const Health = ({ recipes }) => {
   const mealDataManager = new MealDataManager();
 
   const [showGoals, setShowGoals] = useState(true);
+  const [nutritionData, setNutritionData] = useState(null);
 
   console.log(recipes);
 
@@ -56,10 +58,14 @@ const Health = ({ recipes }) => {
       .then((response) => response.json())
       .then((data) => {
         // Handle the data from the API response
-        const nutrients = extractNutrients(data.nutrients);
+        const nutrientValues = data.nutrients.map((nutrient) => nutrient.amount);
+        const nutritionResults = new NutritionResults(nutrientValues);
 
         console.log(data);
-        console.log(nutrients);
+        console.log(nutritionResults.toString());
+        
+        // Update the state with the nutrition data
+        setNutritionData(nutritionResults);
       })
       .catch((error) => {
         // Handle any errors
@@ -106,6 +112,17 @@ const Health = ({ recipes }) => {
         ))}
       </div>
       <br />
+        {/* Display nutrition data */}
+        {nutritionData && (
+        <div>
+          <h3>Nutrition Data:</h3>
+          <p>Calories: {nutritionData.calories}</p>
+          <p>Protein: {nutritionData.protein}</p>
+          <p>Carbs: {nutritionData.carbs}</p>
+          <p>Fat: {nutritionData.fat}</p>
+          <p>Sugar: {nutritionData.sugar}</p>
+        </div>
+      )}
     </div>
   );
 };
