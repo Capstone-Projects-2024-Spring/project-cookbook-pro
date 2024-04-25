@@ -4,6 +4,7 @@
 // Ingredients as well as Meals will be handled by this manager (for now)
 import { Recipe } from "../customObjects/Recipe.js";
 import { Ingredient } from "../customObjects/Ingredient.js";
+import { NutritionResults } from "../customObjects/NutritionResults.js";
 class MealDataManager {
   constructor() {
     // https://spoonacular.com/food-api/console#Dashboard
@@ -107,6 +108,32 @@ class MealDataManager {
       };
     } catch (error) {
       console.error("Error searching for ingredients:", error);
+      throw error;
+    }
+  }
+
+  async getRecipeNutritionById(recipeId) {
+    const searchParams = new URLSearchParams({
+      apiKey: this.spoonacularApi,
+      recipeId,
+    });
+
+    const url = `https://api.spoonacular.com/recipes/${recipeId}/nutritionWidget?${searchParams.toString()}`;
+
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+
+      const searchResults = data.results.map((result) => {
+        return new NutritionResults(result.calories, result.protein, result.carbs, result.fat, result.sugar);
+      });
+
+      return {
+        results: searchResults,
+        totalResults: data.totalResults,
+      };
+    } catch (error) {
+      console.error("Error fetching Recipe nutrition details:", error);
       throw error;
     }
   }

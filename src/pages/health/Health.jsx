@@ -3,13 +3,12 @@ import DisplayGoals from "./components/DisplayGoals.jsx";
 import MacroGoalForm from "./components/MacroGoalForm.jsx";
 import { useAuth } from "../../utils/AuthContext.js";
 import FirestoreListener from "../../firebase/FirestoreListener.js";
-
+import MealDataManager from "../../utils/MealDataManager.js";
 
 const Health = ({ recipes }) => {
-  
   const { user } = useAuth();
   const firestoreListener = new FirestoreListener();
-  
+  const mealDataManager = new MealDataManager();
 
   const [showGoals, setShowGoals] = useState(true);
 
@@ -34,6 +33,33 @@ const Health = ({ recipes }) => {
     }
   }, []);
 
+  // const handleNutritionWidget = (id) => {
+  //   mealDataManager
+  //     .getRecipeNutritionById(id)
+  //     .then((data) => {
+  //       // API response
+  //       console.log(data);
+  //     })
+  //     .catch((error) => {
+  //       // Error Handling
+  //       console.error("Error:", error);
+  //     });
+  // };
+
+  const handleNutritionWidget = (id) => {
+    const apiKey = 'c70a0f5d5e1f4e18bb55c4bfbc94ab1c'; // Replace 'YOUR_API_KEY_HERE' with your actual API key
+    fetch(`https://api.spoonacular.com/recipes/${id}/nutritionWidget.json?apiKey=${apiKey}`)
+      .then(response => response.json())
+      .then(data => {
+        // Handle the data from the API response
+        console.log(data);
+      })
+      .catch(error => {
+        // Handle any errors
+        console.error('Error:', error);
+      });
+  };
+
   return (
     <div>
       {showGoals ? (
@@ -46,13 +72,16 @@ const Health = ({ recipes }) => {
         </div>
       )}
       <br />
-      <div>
+      <div id="display-nutrition">
         <h3>Recipes:</h3>
         {recipes.map((recipe, index) => (
           <div key={index}>
             <p>Recipe Name: {recipe.name}</p>
             <p>Recipe ID: {recipe.id}</p>
             {/* Display other recipe details */}
+            <button onClick={() => handleNutritionWidget(recipe.id)}>
+              View Nutrition
+            </button>
           </div>
         ))}
       </div>
