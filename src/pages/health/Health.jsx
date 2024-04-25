@@ -50,28 +50,30 @@ const Health = ({ recipes }) => {
       .then((data) => {
         // Handle the data from the API response
         const nutrientValues = data.nutrients.map((nutrient) => nutrient.amount);
-        const nutritionResults = new NutritionResults(nutrientValues);
 
-        console.log(data);
-        console.log(nutritionResults.toString());
-        
         // Update the total nutrients
         setTotalNutrients((prevTotal) => ({
-          calories: prevTotal.calories + nutritionResults.calories,
-          protein: prevTotal.protein + nutritionResults.protein,
-          carbs: prevTotal.carbs + nutritionResults.carbs,
-          fat: prevTotal.fat + nutritionResults.fat,
-          sugar: prevTotal.sugar + nutritionResults.sugar
+          calories: prevTotal.calories + nutrientValues[0],
+          protein: prevTotal.protein + nutrientValues[1],
+          carbs: prevTotal.carbs + nutrientValues[2],
+          fat: prevTotal.fat + nutrientValues[3],
+          sugar: prevTotal.sugar + nutrientValues[4],
         }));
-
-        // Update the state with the nutrition data
-        setNutritionData(nutritionResults);
       })
       .catch((error) => {
         // Handle any errors
         console.error("Error:", error);
       });
   };
+
+  useEffect(() => {
+    // Calculate the total nutrients when the component mounts
+    recipes.forEach((recipe) => {
+      handleNutritionWidget(recipe.id);
+    });
+  }, []); 
+
+
 
   // const handleNutritionWidget = (recipeId) => {
   //   mealDataManager
@@ -98,19 +100,7 @@ const Health = ({ recipes }) => {
         </div>
       )}
       <br />
-      <div id="display-nutrition-goals">
-        <h3>Recipes:</h3>
-        {recipes.map((recipe, index) => (
-          <div key={index}>
-            <p>Recipe Name: {recipe.name}</p>
-            <p>Recipe ID: {recipe.id}</p>
-            {/* Display other recipe details */}
-            <button onClick={() => handleNutritionWidget(recipe.id)}>
-              View Nutrition
-            </button>
-          </div>
-        ))}
-      </div>
+
       <br />
         {/* Display total nutrients */}
         {totalNutrients && (
