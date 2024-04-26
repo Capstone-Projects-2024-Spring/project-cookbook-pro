@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Button,
   Card,
@@ -28,23 +28,54 @@ const GeneratedMealCard = ({ recipe }) => {
     </Button>
   );
 
-  const generateDalleImage = async () => {
-    try {
-      const openai = new OpenAI({
-        apiKey: process.env.REACT_APP_OPENAI_API_KEY,
-        dangerouslyAllowBrowser: true,
-      });
-      const response = await openai.images.generate({
-        model: "dall-e-3",
-        prompt: `Please generate a picture of ${recipe.name} that is a ${recipe.summary} in photorealistic style`,
-        n: 1,
-        size: "1024x1024",
-      });
-      setImageURL(response.data[0].url);
-      console.log("Image generated successfully:", response.data[0].url);
-    } catch (error) {
-      console.error("Error generating image:", error);
+  class ImageRequestQueue {
+    constructor() {
+      this.queue = [];
+      this.isProcessing = false;
     }
+  
+    enqueue(promiseGenerator) {
+      this.queue.push(promiseGenerator);
+      this.processQueue();
+    }
+  
+    async processQueue() {
+      if (this.isProcessing || this.queue.length === 0) return;
+      this.isProcessing = true;
+      
+      const currentTask = this.queue.shift(); // Get the first task
+      await currentTask(); // Wait for the task to complete
+  
+      this.isProcessing = false;
+      this.processQueue(); // Proceed to next task
+    }
+  }
+  
+  const imageRequestQueue = new ImageRequestQueue(); // Create a global queue instance
+  
+  const generateDalleImage = () => {
+    imageRequestQueue.enqueue(async () => {
+      try {
+        const openai = new OpenAI({
+          apiKey: process.env.REACT_APP_OPENAI_API_KEY,
+          dangerouslyAllowBrowser: true,
+        });
+        const response = await openai.images.generate({
+          model: "dall-e-3",
+          prompt: `Please generate a picture of ${recipe.name} that is a ${recipe.summary} in photorealistic style`,
+          n: 1,
+          size: "1024x1024",
+        });
+  
+        // Wait for state update to complete
+        await new Promise(resolve => {
+          setImageURL(response.data[0].url);
+          resolve(); // This ensures that the setImageURL operation is acknowledged as completed
+        });
+      } catch (error) {
+        console.error("Error generating image:", error);
+      }
+    });
   };
 
   const saveGPTResponse = async () => {
@@ -74,6 +105,12 @@ const GeneratedMealCard = ({ recipe }) => {
       console.error("Error saving GPT response:", error);
     }
   };
+
+  useEffect(() => {
+    if (!imageURL) {
+      generateDalleImage();  // Only call the function if imageURL is not set
+    }
+  }, [imageURL]); 
 
   return (
     <div className="meal-card">
@@ -118,13 +155,6 @@ const GeneratedMealCard = ({ recipe }) => {
           onClick={saveGPTResponse}
         >
           {isSaved ? "Saved" : "Save"}
-        </Button>
-        <Button
-          className="meal-card-button"
-          color="info"
-          onClick={generateDalleImage}
-        >
-          Generate DALL-E Image
         </Button>
         <div className="meal-card-reasoning">{recipe.inspirationReasoning}</div>
         {selectedMeal && (
