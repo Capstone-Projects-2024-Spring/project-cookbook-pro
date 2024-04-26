@@ -13,12 +13,15 @@ import RecipeDetails from "../../../components/RecipeDetails.jsx";
 import OpenAI from "openai";
 import FirestoreService from "../../../firebase/FirebaseService";
 import { useAuth } from "../../../utils/AuthContext.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+
 
 const GeneratedMealCard = ({ recipe }) => {
   const [selectedMeal, setSelectedMeal] = useState(null);
   const [imageURL, setImageURL] = useState(null);
+  const [firebaseImgURL, setFirebaseImgURL] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
-  const [isSaved, setIsSaved] = useState(recipe.isSaved || false); // Add this line
+  const [isSaved, setIsSaved] = useState(recipe.isSaved || false); 
   const { user } = useAuth();
   const toggleModal = () => setIsModalOpen(!isModalOpen); // Toggle modal
 
@@ -55,44 +58,62 @@ const GeneratedMealCard = ({ recipe }) => {
   
   const generateDalleImage = () => {
     imageRequestQueue.enqueue(async () => {
-      try {
-        const openai = new OpenAI({
-          apiKey: process.env.REACT_APP_OPENAI_API_KEY,
-          dangerouslyAllowBrowser: true,
-        });
-        const response = await openai.images.generate({
-          model: "dall-e-3",
-          prompt: `Please generate a picture of ${recipe.name} that is a ${recipe.summary} in photorealistic style`,
-          n: 1,
-          size: "1024x1024",
-        });
-  
-        // Wait for state update to complete
-        await new Promise(resolve => {
-          setImageURL(response.data[0].url);
-          resolve(); // This ensures that the setImageURL operation is acknowledged as completed
-        });
-      } catch (error) {
-        console.error("Error generating image:", error);
-      }
+        try {
+            const openai = new OpenAI({
+                apiKey: process.env.REACT_APP_OPENAI_API_KEY,
+                dangerouslyAllowBrowser: true,
+            });
+            const response = await openai.images.generate({
+                model: "dall-e-3",
+                prompt: `Please generate a picture of ${recipe.name} that is a ${recipe.summary} in photorealistic style`,
+                n: 1,
+                size: "1024x1024",
+            });
+
+            const imageUrl = response.data[0].url;
+            setImageURL(imageUrl); // This sets the URL state.
+
+            // Fetch the image and convert it to a Blob, then upload it to Firebase
+            const imageResponse = await fetch(imageUrl, { mode: 'no-cors' });
+            const imageBlob = await imageResponse.blob(); // Converts image to a blob
+
+            // Correctly reference Firebase Storage
+            const storage = getStorage();
+            const storageRef = ref(storage, `images/${recipe.name}.png`);
+            const uploadTask = await uploadBytes(storageRef, imageBlob); // Upload the blob
+
+            // Get download URL after the upload is complete
+            const downloadURL = await getDownloadURL(uploadTask.ref);
+            console.log('File available at', downloadURL);
+            setFirebaseImgURL(downloadURL); // Update the state with the new URL
+        } catch (error) {
+            console.error("Error generating or uploading image:", error);
+        }
     });
-  };
+};
+
 
   const saveGPTResponse = async () => {
     if (!user || !user.uid) {
       console.error("User not authenticated.");
       return;
     }
-
     if (isSaved) {
       console.log("Recipe already saved, skipping save.");
+      return;
+    }
+    if (!firebaseImgURL) {
+      alert("Please wait for the image to upload before saving the recipe.");
       return;
     }
 
     try {
       const collectionPath = `Users/${user.uid}/generatedRecipes`;
-
-      const savedRecipe = { ...recipe, isSaved: true }; // Create a new object with isSaved set to true
+      const savedRecipe = {
+        ...recipe,
+        isSaved: true,
+        imageUrl: firebaseImgURL
+      };
 
       await FirestoreService.createDocument(
         collectionPath,
@@ -100,11 +121,13 @@ const GeneratedMealCard = ({ recipe }) => {
         savedRecipe,
         "gptResponse"
       );
-      setIsSaved(true); // Update the local state to reflect that the recipe is saved
+      setIsSaved(true);
+      alert("Recipe saved successfully with image!");
     } catch (error) {
       console.error("Error saving GPT response:", error);
     }
   };
+  
 
   useEffect(() => {
     if (!imageURL) {

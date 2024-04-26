@@ -3,6 +3,7 @@ import { getFirestore } from "@firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { getFunctions } from "firebase/functions";
 import { httpsCallable } from "firebase/functions";
+import { getStorage } from "firebase/storage";
 
 // Web app firebase config
 const firebaseConfig = {
@@ -21,10 +22,12 @@ const firebaseApp = initializeApp(firebaseConfig);
 const firebaseAuth = getAuth(firebaseApp);
 const firestoreDb = getFirestore(firebaseApp);
 const firebaseFunctions = getFunctions(firebaseApp);
+const imgDB=getStorage(firebaseApp);
 export {
   firebaseApp,
   firebaseAuth,
   firestoreDb,
   firebaseFunctions,
   httpsCallable,
+  imgDB,
 };
