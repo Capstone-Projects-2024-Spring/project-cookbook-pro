@@ -18,7 +18,6 @@
 }
 
 .input-form-container {
-  border: solid;
   margin: 3px;
   display: flex;
   flex-direction: column;
@@ -29,7 +28,7 @@
 
 .macro-goals-display-container {
   display: block;
-  border: solid;
+  border: solid 2px;
   margin-left: 10px;
   width: 290px;
   height: 180px;

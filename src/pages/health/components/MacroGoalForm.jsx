@@ -67,12 +67,17 @@ const MacroGoalForm = ({ onSubmit }) => {
     // Check for negative and zeroed input
     const isValid = goalsFields.every((field) => {
       const value = goalFormData[field.name];
-      return value && value.trim() !== "" && parseFloat(value) > 0;
+      return (
+        value &&
+        value.trim() !== "" &&
+        parseFloat(value) > 0 &&
+        parseFloat(value) <= 10000
+      );
     });
 
     // If input is zero or negative, issue an alert
     if (!isValid) {
-      alert("Please fill out all fields with positive numbers.");
+      alert("Goals not saved. Please fill out all fields with positive numbers less than or equal to 10,000.");
       return;
     }
 

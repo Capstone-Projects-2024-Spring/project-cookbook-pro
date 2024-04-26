@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import SavedMeals from "./SavedMeals";
 import CustomMeals from "./CustomMeals";
+import GeneratedMeals from "./GeneratedMeals";
 import { useAuth } from "../../utils/AuthContext";
 import styled from "styled-components";
 
@@ -47,8 +48,20 @@ const UserDataViewer = () => {
         >
           Saved
         </ToggleButton>
-      </ToggleContainer>
-      {currentCollection === "saved" ? <SavedMeals /> : <CustomMeals />}
+        <ToggleButton id="toggle-button-generated"
+          active={currentCollection === "generated" ? "true" : undefined}
+          onClick={() => toggleCollection("generated")}
+        >
+          Generated
+        </ToggleButton>
+        </ToggleContainer>
+      {currentCollection === "saved" ? (
+        <SavedMeals />
+      ) : currentCollection === "custom" ? (
+        <CustomMeals />
+      ) : (
+        <GeneratedMeals />
+      )}
     </div>
   );
 };

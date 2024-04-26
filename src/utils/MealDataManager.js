@@ -110,6 +110,41 @@ class MealDataManager {
       throw error;
     }
   }
+
+  async fetchRecipeDetails(recipeId) {
+    const searchQuery = new URLSearchParams();
+    searchQuery.append("apiKey", this.spoonacularApi);
+
+    const fullUrl = `${
+      this.spoonacularURL
+    }/${recipeId}/nutritionWidget.json?${searchQuery.toString()}`;
+
+    try {
+      const response = await fetch(fullUrl);
+      const data = await response.json();
+
+      let sugar = "N/A";
+      for (const item of data.bad) {
+        if (item.title === "Sugar") {
+          sugar = item.amount;
+          break;
+        }
+      }
+
+      const nutritionInfo = {
+        calories: parseFloat(data.calories),
+        carbohydrates: parseFloat(data.carbs),
+        protein: parseFloat(data.protein),
+        sugar: sugar !== "N/A" ? parseFloat(sugar) : "N/A",
+        fat: parseFloat(data.fat),
+      };
+
+      return nutritionInfo;
+    } catch (error) {
+      console.error("Error fetching recipe details:", error);
+      throw error;
+    }
+  }
 }
 
 export default MealDataManager;

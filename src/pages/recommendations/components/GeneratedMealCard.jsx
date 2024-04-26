@@ -1,13 +1,26 @@
-import React, { useState, useEffect } from "react";
-import { Button, Card, CardBody, CardTitle, CardImg, Modal, ModalHeader, ModalBody } from "reactstrap";
+
+import React, { useState } from "react";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardTitle,
+  CardImg,
+  Modal,
+  ModalHeader,
+  ModalBody,
+} from "reactstrap";
 import RecipeDetails from "../../../components/RecipeDetails.jsx";
 import OpenAI from "openai";
+import FirestoreService from "../../../firebase/FirebaseService";
+import { useAuth } from "../../../utils/AuthContext.js";
 
 const GeneratedMealCard = ({ recipe }) => {
   const [selectedMeal, setSelectedMeal] = useState(null);
   const [imageURL, setImageURL] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
-
+  const [isSaved, setIsSaved] = useState(recipe.isSaved || false); // Add this line
+  const { user } = useAuth();
   const toggleModal = () => setIsModalOpen(!isModalOpen); // Toggle modal
 
   const buttonOptions = (
@@ -29,9 +42,37 @@ const GeneratedMealCard = ({ recipe }) => {
         size: "1024x1024",
       });
       setImageURL(response.data[0].url);
-      console.log('Image generated successfully:', response.data[0].url);
+      console.log("Image generated successfully:", response.data[0].url);
     } catch (error) {
-      console.error('Error generating image:', error);
+      console.error("Error generating image:", error);
+    }
+  };
+
+  const saveGPTResponse = async () => {
+    if (!user || !user.uid) {
+      console.error("User not authenticated.");
+      return;
+    }
+
+    if (isSaved) {
+      console.log("Recipe already saved, skipping save.");
+      return;
+    }
+
+    try {
+      const collectionPath = `Users/${user.uid}/generatedRecipes`;
+
+      const savedRecipe = { ...recipe, isSaved: true }; // Create a new object with isSaved set to true
+
+      await FirestoreService.createDocument(
+        collectionPath,
+        savedRecipe.id,
+        savedRecipe,
+        "gptResponse"
+      );
+      setIsSaved(true); // Update the local state to reflect that the recipe is saved
+    } catch (error) {
+      console.error("Error saving GPT response:", error);
     }
   };
 
@@ -53,7 +94,13 @@ const GeneratedMealCard = ({ recipe }) => {
 
         {imageURL && (
           <>
-            <CardImg top width="100%" src={imageURL} alt="Generated Recipe Image" onClick={toggleModal} />
+            <CardImg
+              top
+              width="100%"
+              src={imageURL}
+              alt="Generated Recipe Image"
+              onClick={toggleModal}
+            />
             <Modal isOpen={isModalOpen} toggle={toggleModal}>
               <ModalHeader toggle={toggleModal}>{recipe.name}</ModalHeader>
               <ModalBody>
@@ -64,10 +111,20 @@ const GeneratedMealCard = ({ recipe }) => {
         )}
       </div>
       <CardBody>
-        <Button className="meal-card-button" color="primary" onClick={() => setSelectedMeal({ ...recipe })}>
+        <Button
+          className="meal-card-button"
+          color="primary"
+          onClick={() => setSelectedMeal({ ...recipe })}
+        >
           Details
         </Button>
-        <Button className="meal-card-button" color="success">Save</Button>
+        <Button
+          className="meal-card-button"
+          color="success"
+          onClick={saveGPTResponse}
+        >
+          {isSaved ? "Saved" : "Save"}
+        </Button>
         <div className="meal-card-reasoning">{recipe.inspirationReasoning}</div>
         {selectedMeal && (
           <RecipeDetails

@@ -51,6 +51,10 @@ const GPT = () => {
           }
         );
 
+        const newRecipeId = `gpt-${Date.now()}-${Math.floor(
+          Math.random() * 1000
+        )}`;
+
         return {
           name: recipe.name,
           summary: recipe.summary,
@@ -58,7 +62,7 @@ const GPT = () => {
           ingredients: processedIngredients,
           cuisine: recipe.cuisine,
           dishType: recipe.dishType,
-          id: recipe.id,
+          id: newRecipeId,
           savedRecipeInspiration: recipe.savedRecipeInspiration,
           inspirationReasoning: recipe.inspirationReasoning,
         };

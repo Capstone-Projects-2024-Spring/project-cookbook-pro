@@ -112,17 +112,29 @@ class FirebaseConverter {
           console.error("GPT response is undefined or null");
           return null;
         }
-
+        //console.log(gptResponse)
         return {
-          userMessage: gptResponse.userMessage,
-          assistantResponse: gptResponse.assistantResponse,
+          name: gptResponse.name,
+          cuisine: gptResponse.cuisine,
+          dishType: gptResponse.dishType,
+          id:  gptResponse.id,
+          inspirationReasoning: gptResponse.inspirationReasoning,
+          savedRecipeInspiration: gptResponse.savedRecipeInspiration,
+          servings: gptResponse.servings,
+          summary: gptResponse.summary,
         };
       },
       fromFirestore: (snapshot, options) => {
         const data = snapshot.data(options);
         return {
-          userMessage: data.userMessage,
-          assistantResponse: data.assistantResponse,
+          name: data.name,
+          cuisine: data.cuisine,
+          dishType: data.dishType,
+          id: data.id,
+          inspirationReasoning: data.inspirationReasoning,
+          savedRecipeInspiration: data.savedRecipeInspiration,
+          servings: data.servings,
+          summary: data.summary,
         };
       },
     };

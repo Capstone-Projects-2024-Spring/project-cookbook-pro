@@ -285,6 +285,12 @@ const MyCalendar = () => {
             ariaHideApp={false}
             isOpen={isModalOpen}
             onRequestClose={closeModal}
+            style={{
+              content: {
+                width: '50%',
+                margin: '0 auto',
+              }
+            }}
           >
             <MealForm closeModal={closeModal} addPlan={addPlan} />
           </Modal>

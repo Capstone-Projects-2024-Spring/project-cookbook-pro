@@ -1,0 +1,17 @@
+#modal-goals-column {
+  width: 25%;
+  text-align: left;
+  display: inline-block;
+}
+
+#modal-recipetotals-column {
+  width: 25%;
+  text-align: center;
+  display: inline-block;
+}
+
+#modal-visual-column {
+  width: 40%;
+  text-align: center;
+  display: inline-block;
+}
