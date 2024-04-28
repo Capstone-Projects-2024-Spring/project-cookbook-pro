@@ -70,21 +70,24 @@ const GeneratedMealCard = ({ recipe }) => {
                 size: "1024x1024",
             });
 
+            // Extract the URL from the response
             const imageUrl = response.data[0].url;
-            setImageURL(imageUrl); // This sets the URL state.
+            setImageURL(imageUrl);
 
-            // Fetch the image and convert it to a Blob, then upload it to Firebase
-            const imageResponse = await fetch(imageUrl, { mode: 'no-cors' });
-            const imageBlob = await imageResponse.blob(); // Converts image to a blob
+            // Modify this to point to your proxy server
+            const proxyUrl = `http://localhost:3000/proxy?url=${encodeURIComponent(imageUrl)}`;
 
-            // Correctly reference Firebase Storage
+            // Fetch the image through the proxy
+            const imageResponse = await fetch(proxyUrl);
+            const imageBlob = await imageResponse.blob();
+
+            // Reference Firebase Storage correctly
             const storage = getStorage();
-            const storageRef = ref(storage, `images/${recipe.name}.png`);
+            const storageRef = ref(storage, `images/${recipe.name.replace(/ /g, '_')}.png`);
             const uploadTask = await uploadBytes(storageRef, imageBlob); // Upload the blob
 
-            // Get download URL after the upload is complete
+            // Get the download URL after the upload is complete
             const downloadURL = await getDownloadURL(uploadTask.ref);
-            console.log('File available at', downloadURL);
             setFirebaseImgURL(downloadURL); // Update the state with the new URL
         } catch (error) {
             console.error("Error generating or uploading image:", error);
