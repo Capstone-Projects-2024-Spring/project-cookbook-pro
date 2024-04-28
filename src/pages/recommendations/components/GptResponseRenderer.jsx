@@ -10,7 +10,7 @@ const GptResponseRenderer = ({ response, loading }) => {
       <div id="response-container">
         {loading && (
           <pre className="pre-style">
-            Generating your Recipe Powered by ChatGPT...
+            ChatGPT is thinking up your recipes...
           </pre>
         )}
         {Array.isArray(response?.recipes) &&

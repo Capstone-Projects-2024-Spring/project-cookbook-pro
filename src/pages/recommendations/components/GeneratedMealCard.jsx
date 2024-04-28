@@ -14,6 +14,7 @@ import OpenAI from "openai";
 import FirestoreService from "../../../firebase/FirebaseService";
 import { useAuth } from "../../../utils/AuthContext.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { imageRequestQueue } from './requestQueue';
 
 
 const GeneratedMealCard = ({ recipe }) => {
@@ -22,6 +23,8 @@ const GeneratedMealCard = ({ recipe }) => {
   const [firebaseImgURL, setFirebaseImgURL] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
   const [isSaved, setIsSaved] = useState(recipe.isSaved || false); 
+  const [isRequesting, setIsRequesting] = useState(false);
+  const [contentReady, setContentReady] = useState(false); 
   const { user } = useAuth();
   const toggleModal = () => setIsModalOpen(!isModalOpen); // Toggle modal
 
@@ -30,6 +33,8 @@ const GeneratedMealCard = ({ recipe }) => {
       Close
     </Button>
   );
+
+  var contentCounter=0;
 
   class ImageRequestQueue {
     constructor() {
@@ -54,46 +59,42 @@ const GeneratedMealCard = ({ recipe }) => {
     }
   }
   
-  const imageRequestQueue = new ImageRequestQueue(); // Create a global queue instance
-  
   const generateDalleImage = () => {
+    if (isRequesting) return;
+    setIsRequesting(true);
+
     imageRequestQueue.enqueue(async () => {
-        try {
-            const openai = new OpenAI({
-                apiKey: process.env.REACT_APP_OPENAI_API_KEY,
-                dangerouslyAllowBrowser: true,
-            });
-            const response = await openai.images.generate({
-                model: "dall-e-3",
-                prompt: `Please generate a picture of ${recipe.name} that is a ${recipe.summary} in photorealistic style`,
-                n: 1,
-                size: "1024x1024",
-            });
+      try {
+        const openai = new OpenAI({
+          apiKey: process.env.REACT_APP_OPENAI_API_KEY,
+          dangerouslyAllowBrowser: true,
+        });
+        const response = await openai.images.generate({
+          model: "dall-e-3",
+          prompt: `Please generate a picture of ${recipe.name} that is a ${recipe.summary} in photorealistic style`,
+          n: 1,
+          size: "1024x1024",
+        });
 
-            // Extract the URL from the response
-            const imageUrl = response.data[0].url;
-            setImageURL(imageUrl);
+        const imageUrl = response.data[0].url;
+        setImageURL(imageUrl);
 
-            // Modify this to point to your proxy server
-            const proxyUrl = `http://localhost:3000/proxy?url=${encodeURIComponent(imageUrl)}`;
+        const proxyUrl = `http://localhost:3000/proxy?url=${encodeURIComponent(imageUrl)}`;
+        const imageResponse = await fetch(proxyUrl);
+        const imageBlob = await imageResponse.blob();
 
-            // Fetch the image through the proxy
-            const imageResponse = await fetch(proxyUrl);
-            const imageBlob = await imageResponse.blob();
+        const storage = getStorage();
+        const storageRef = ref(storage, `images/${recipe.name.replace(/ /g, '_')}.png`);
+        await uploadBytes(storageRef, imageBlob);
 
-            // Reference Firebase Storage correctly
-            const storage = getStorage();
-            const storageRef = ref(storage, `images/${recipe.name.replace(/ /g, '_')}.png`);
-            const uploadTask = await uploadBytes(storageRef, imageBlob); // Upload the blob
-
-            // Get the download URL after the upload is complete
-            const downloadURL = await getDownloadURL(uploadTask.ref);
-            setFirebaseImgURL(downloadURL); // Update the state with the new URL
-        } catch (error) {
-            console.error("Error generating or uploading image:", error);
-        }
+        const downloadURL = await getDownloadURL(storageRef);
+        setFirebaseImgURL(downloadURL);
+      } finally {
+        setIsRequesting(false);
+        setContentReady(true);
+      }
     });
-};
+  };
 
 
   const saveGPTResponse = async () => {
@@ -133,38 +134,38 @@ const GeneratedMealCard = ({ recipe }) => {
   
 
   useEffect(() => {
-    if (!imageURL) {
-      generateDalleImage();  // Only call the function if imageURL is not set
+    if (recipe) {
+      generateDalleImage(); // Trigger image generation when recipe is set
     }
-  }, [imageURL]); 
+  }, [recipe]);
+
+
 
   return (
     <div className="meal-card">
       <div className="meal-card-content">
-        <CardTitle>
-          <h5 className="meal-card-title text-truncate">{recipe.name}</h5>
-        </CardTitle>
-        <div className="meal-card-inspiration">
-          Inspired by: {recipe.savedRecipeInspiration}
-        </div>
-        <div className="meal-card-summary">{recipe.summary}</div>
-
-        {imageURL && (
+        {contentReady ? (
           <>
-            <CardImg
-              top
-              width="100%"
-              src={imageURL}
-              alt="Generated Recipe Image"
-              onClick={toggleModal}
-            />
-            <Modal isOpen={isModalOpen} toggle={toggleModal}>
-              <ModalHeader toggle={toggleModal}>{recipe.name}</ModalHeader>
-              <ModalBody>
-                <img src={imageURL} width="100%" alt="Full-size Recipe Image" />
-              </ModalBody>
-            </Modal>
+            <CardTitle>
+              <h5 className="meal-card-title text-truncate">{recipe.name}</h5>
+            </CardTitle>
+            <div className="meal-card-inspiration">
+              Inspired by: {recipe.savedRecipeInspiration}
+            </div>
+            <div className="meal-card-summary">{recipe.summary}</div>
+            <div>
+              <CardImg top width="100%" src={imageURL} alt="Generated Recipe Image" onClick={toggleModal} />
+              <Modal isOpen={isModalOpen} toggle={toggleModal}>
+                <ModalHeader toggle={toggleModal}>{recipe.name}</ModalHeader>
+                <ModalBody>
+                  <img src={imageURL} width="100%" alt="Full-size Recipe Image" />
+                </ModalBody>
+              </Modal>
+              <div className="meal-card-reasoning">{recipe.inspirationReasoning}</div>
+            </div>
           </>
+        ) : (
+          <div className="meal-card-loading">Cooking up your recipe...</div>
         )}
       </div>
       <CardBody>
@@ -182,7 +183,6 @@ const GeneratedMealCard = ({ recipe }) => {
         >
           {isSaved ? "Saved" : "Save"}
         </Button>
-        <div className="meal-card-reasoning">{recipe.inspirationReasoning}</div>
         {selectedMeal && (
           <RecipeDetails
             meal={selectedMeal}
@@ -193,6 +193,7 @@ const GeneratedMealCard = ({ recipe }) => {
       </CardBody>
     </div>
   );
+        
 };
 
 export default GeneratedMealCard;
