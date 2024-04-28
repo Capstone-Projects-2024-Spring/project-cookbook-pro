@@ -96,7 +96,11 @@ const GPT = () => {
         dishType: "PLEASE REPLACE WITH BREAKFAST LUNCH OR DINNER",
         id: "INSERT TIMESTAP HERE",
         ingredients: [
-          "amount(INSERT INTEGER AMOUNT OF INGREDIENT), id, name(INSERT JUST THE INGREDIENT NAME), unit(INSERT UNIT OF MEASUREMENT FOR AMOUNT)",
+          "amount(2), id, name(flour), unit(cups)",
+          "amount(1), id, name(sugar), unit(cup)",
+          "amount(3), id, name(eggs), unit(whole)",
+          "amount(1), id, name(milk), unit(cup)",
+          "amount(0.5), id, name(vanilla extract), unit(teaspoon)",
         ],
         name: "PLEASE INSERT NAME OF GENERATED DISH",
         servings: "PLEASE INSERT INTEGER OF SERVINGS",
