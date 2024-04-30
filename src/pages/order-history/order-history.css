@@ -1,0 +1,89 @@
+:root {
+    --maize: #ffb35d;
+    --light-yellow: #fddabc;
+    --yellow: #ffe75dff;
+    --yello-lighter: #fdf3bc;
+    --atomic-tangerine: #ff934fff;
+    --atomic-tangerine-red: #ff694f;
+    --atomic-tangerine-red-darker: #ca4028;
+    --atomic-tangerine-very-light: #F2E3D5;
+    --atomic-tangerine-darker: #cb6728;
+    --atomic-tangerine-2: #b9622b;
+    --atomic-tangerine-2-darker: #914d23;
+    --atomic-tangerine-2-darker-darker: #54290e;
+    --cerise: #d24970ff;
+    --light-pink: #e387a1;
+    --light-pink-darker: #d26483;
+    --pink: #7e3c4e;
+    --pink-lighter: #d35e7d;
+    --paynes-gray: #32657cff;
+    --air-superiority-blue: #669bb7ff;
+    --air-superiority-blue-lighter: #a9c6d6;
+    --air-superiority-blue-lighter-lighter: #9bcae3;
+    --air-superiority-blue-lighter-whiter: #d8ebf5;
+    --air-superiority-blue-darker: #375463;
+    --air-superiority-blue-darker-darker: #2d4855;
+    --orange-grey: #80726a;
+    --orange-grey-darker: #65574f;
+    --white: #F0F9F9;
+    --white-darker: #898989;
+    overflow-y: hidden;
+  }
+
+  .order-history-container h1 {
+    color: var(--air-superiority-blue-darker-darker);
+    font-weight: 800;
+    font-size: 2.5rem;
+  }
+  
+  .order-container {
+    background-color: var(--air-superiority-blue-lighter-whiter);
+    border: none;
+    color: var(--air-superiority-blue-darker-darker);
+    padding: 0px;
+    margin: 5px 0;
+    border-radius: 1rem;
+  }
+
+  .expand-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  
+  /* Show the content when the div is clicked */
+  .order-container.open + .expand-content {
+    max-height:fit-content
+  }
+
+  .order-container h2 {
+    color: var(--air-superiority-blue-darker-darker);
+    font-weight: 600;
+  }
+
+  .clickable-area-header {
+    background-color: var(--air-superiority-blue-lighter-whiter);
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 1rem ;
+  }
+
+  .clickable-area-header:hover {
+    background-color: var(--air-superiority-blue-lighter-lighter);
+  }
+
+  .recipe-names h3 {
+    padding-left: 1rem;
+  }
+
+  .ingredients h3 {
+    padding-left: 1rem;
+  }
+
+  .recipe-names ul {
+    padding-left: 3rem;
+  }
+
+  .ingredients ul {
+    padding-left: 3rem;
+  }
