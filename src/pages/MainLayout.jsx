@@ -1,17 +1,19 @@
-import React from "react";
-import WrappedUserDataViewer from "../components/side-container/UserDataViewer";
+import React, { useState } from "react";
+import { UserDataViewerProvider } from "../components/side-container/UserDataViewerContext";
+import UserDataViewer from "../components/side-container/UserDataViewer";
 
 const MainLayout = ({ children }) => {
+  const [currentCollection, setCurrentCollection] = useState("saved");
+
   return (
-    <div>
+    <UserDataViewerProvider value={{ currentCollection, setCurrentCollection }}>
       <div className="main-container">
         <div className="sidebar-container">
-          <WrappedUserDataViewer />
+          <UserDataViewer />
         </div>
-        {/* This is where our pages (children) get processed through the layout*/}
         <div className="content-container">{children}</div>
       </div>
-    </div>
+    </UserDataViewerProvider>
   );
 };
 

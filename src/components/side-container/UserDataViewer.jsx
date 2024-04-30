@@ -1,10 +1,7 @@
 import React, { useContext } from "react";
 import { useAuth } from "../../utils/AuthContext";
 import styled from "styled-components";
-import {
-  UserDataViewerProvider,
-  UserDataViewerContext,
-} from "./UserDataViewerContext";
+import { UserDataViewerContext } from "./UserDataViewerContext";
 import UserDataViewerItems from "./UserDataViewerItems";
 
 const ToggleContainer = styled.div`
@@ -75,10 +72,4 @@ const UserDataViewer = () => {
   );
 };
 
-const WrappedUserDataViewer = () => (
-  <UserDataViewerProvider>
-    <UserDataViewer />
-  </UserDataViewerProvider>
-);
-
-export default WrappedUserDataViewer;
+export default UserDataViewer;

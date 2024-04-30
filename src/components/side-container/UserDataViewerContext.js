@@ -1,15 +1,20 @@
 import React, { createContext, useState } from "react";
 
-export const UserDataViewerContext = createContext();
+const UserDataViewerContext = createContext();
 
-export const UserDataViewerProvider = ({ children }) => {
+const UserDataViewerProvider = ({ children }) => {
   const [currentCollection, setCurrentCollection] = useState("saved");
 
+  const contextData = {
+    currentCollection,
+    setCurrentCollection,
+  };
+
   return (
-    <UserDataViewerContext.Provider
-      value={{ currentCollection, setCurrentCollection }}
-    >
+    <UserDataViewerContext.Provider value={contextData}>
       {children}
     </UserDataViewerContext.Provider>
   );
 };
+
+export { UserDataViewerContext, UserDataViewerProvider };
