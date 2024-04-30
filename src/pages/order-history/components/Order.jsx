@@ -3,10 +3,22 @@ import "../order-history.css";
 
 const Order = ({ recipeNames, ingredients, orderId }) => {
 
+  const addClickedProperty = (ingredients) => {
+    return ingredients.map(ingredient => ({...ingredient, clicked: false}));
+  };
+
   const [expanded, setExpanded] = useState(false);
+  const [parsedIngredients, setIngredients] = useState(addClickedProperty(ingredients));
+
 
   const toggleExpand = () => {
     setExpanded(!expanded);
+  };
+
+  const handleItemClick = (index) => {
+    const updatedIngredients = [...parsedIngredients];
+    updatedIngredients[index].clicked = !updatedIngredients[index].clicked;
+    setIngredients(updatedIngredients);
   };
 
   return (
@@ -26,9 +38,16 @@ const Order = ({ recipeNames, ingredients, orderId }) => {
           <h3>Ingredients</h3>
           <ul>
             {ingredients &&
-              Array.isArray(ingredients) &&
-              ingredients.map((ingredient, index) => (
-                <li key={index}>
+              Array.isArray(parsedIngredients) &&
+              parsedIngredients.map((ingredient, index) => (
+                <li 
+                  key={index}
+                  style={{
+                    textDecoration: ingredient.clicked ? "line-through" : "none",
+                    cursor: "pointer"
+                  }}
+                  onClick={() => handleItemClick(index)}
+                >
                   {typeof ingredient === "object"
                     ? `${ingredient.name} (${ingredient.amount} ${ingredient.unit})`
                     : ingredient}
