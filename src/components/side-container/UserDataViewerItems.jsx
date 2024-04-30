@@ -35,9 +35,8 @@ const UserDataViewerItems = () => {
 
       const unsubscribeFromRecipes = firestoreListener.subscribeToCollection(
         userRecipesPath,
-        (docs) => {
-          const fetchedRecipes = docs.map((doc) => doc);
-          setRecipes(fetchedRecipes);
+        (data) => {
+          setRecipes(data);
         }
       );
 
@@ -57,7 +56,6 @@ const UserDataViewerItems = () => {
         documentId,
         dataType
       );
-      setRecipes(recipes.filter((recipe) => recipe.id !== documentId));
     } catch (error) {
       console.error("Error deleting the document:", error);
     }
