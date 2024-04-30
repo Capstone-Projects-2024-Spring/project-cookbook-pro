@@ -7,7 +7,6 @@ import { Recipe } from "../../customObjects/Recipe.js";
 import { Ingredient } from "../../customObjects/Ingredient.js";
 import FirestoreService from "../../firebase/FirebaseService.js";
 import "./create-recipe.css";
-import { UserDataViewerContext } from "../../components/side-container/UserDataViewerContext.js";
 
 const CreateRecipes = () => {
   const [recipeFormData, setRecipeFormData] = useState({
@@ -26,7 +25,6 @@ const CreateRecipes = () => {
   const [invalidIngredientFields, setInvalidIngredientFields] = useState([]);
 
   const { user } = useAuth();
-  const { setCurrentCollection } = useContext(UserDataViewerContext);
 
   useEffect(() => {
     if (selectedIngredient) {
@@ -178,7 +176,6 @@ const CreateRecipes = () => {
         ]);
 
         setSelectedIngredient(null);
-        setCurrentCollection("custom");
 
         alert("Custom Recipe created successfully!");
       } catch (error) {
