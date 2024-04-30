@@ -749,3 +749,17 @@
 .btn-primary:hover {
   background-color: var(--atomic-tangerine-2-darker) !important;
 }
+
+/* .list-group li {
+  background-color: var(--white);
+}
+
+.list-group.fader {
+  animation: fadeBackground 1s;
+}
+
+@keyframes fadeBackground {
+  0% { background-color: var(--white); }
+  50% { background-color: #ffb07c; }
+  100% { background-color: var(--white); }
+} */
