@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { ListGroup, ListGroupItem, Button } from "reactstrap";
 import RecipeDetails from "../RecipeDetails.jsx";
 import { useAuth } from "../../utils/AuthContext.js";
@@ -11,31 +11,39 @@ import {
   faCartShopping,
   faCheck,
 } from "@fortawesome/free-solid-svg-icons";
+import { UserDataViewerContext } from "./UserDataViewerContext";
 
-const GeneratedMeals = () => {
-  const [generatedRecipes, setGeneratedRecipes] = useState([]);
+const UserDataViewerItems = () => {
+  const [recipes, setRecipes] = useState([]);
   const [selectedMeal, setSelectedMeal] = useState(null);
 
   const { user } = useAuth();
   const firestoreListener = new FirestoreListener();
+  const { currentCollection } = useContext(UserDataViewerContext);
 
   useEffect(() => {
     if (user) {
-      const userGeneratedRecipesPath = `Users/${user.uid}/generatedRecipes`;
+      let userRecipesPath;
 
-      const unsubscribeFromGeneratedRecipes =
-        firestoreListener.subscribeToCollection(
-          userGeneratedRecipesPath,
-          (docs) => {
-            const recipes = docs.map((doc) => doc);
-            setGeneratedRecipes(recipes);
-          }
-        );
+      if (currentCollection === "custom") {
+        userRecipesPath = `Users/${user.uid}/CustomRecipes`;
+      } else if (currentCollection === "saved") {
+        userRecipesPath = `Users/${user.uid}/SavedRecipes`;
+      } else if (currentCollection === "generated") {
+        userRecipesPath = `Users/${user.uid}/generatedRecipes`;
+      }
 
-      // Cleanup function
-      return unsubscribeFromGeneratedRecipes;
+      const unsubscribeFromRecipes = firestoreListener.subscribeToCollection(
+        userRecipesPath,
+        (docs) => {
+          const fetchedRecipes = docs.map((doc) => doc);
+          setRecipes(fetchedRecipes);
+        }
+      );
+
+      return unsubscribeFromRecipes;
     }
-  }, [user]);
+  }, [user, currentCollection]);
 
   async function unsaveRecipeFromCurrentUser(
     collectionPath,
@@ -49,9 +57,7 @@ const GeneratedMeals = () => {
         documentId,
         dataType
       );
-      setGeneratedRecipes(
-        generatedRecipes.filter((recipe) => recipe.id !== documentId)
-      );
+      setRecipes(recipes.filter((recipe) => recipe.id !== documentId));
     } catch (error) {
       console.error("Error deleting the document:", error);
     }
@@ -60,12 +66,10 @@ const GeneratedMeals = () => {
   async function saveData(collectionPath, documentId, data, dataType) {
     const savedMeal = data;
     savedMeal.isSaved = true;
-    //savedMeal.instructions kept showing up as null, preventing the recipes from being saved
     if (savedMeal.instructions === undefined) {
       savedMeal.instructions = "";
     }
 
-    // Build the path here with the context provided by the current user
     try {
       await FirestoreService.createDocument(
         collectionPath,
@@ -83,10 +87,19 @@ const GeneratedMeals = () => {
       <Button
         color="primary"
         onClick={() => {
+          let collectionPath;
+          if (currentCollection === "custom") {
+            collectionPath = `Users/${user.uid}/CustomRecipes/`;
+          } else if (currentCollection === "saved") {
+            collectionPath = `Users/${user.uid}/SavedRecipes/`;
+          } else if (currentCollection === "generated") {
+            collectionPath = `Users/${user.uid}/generatedRecipes/`;
+          }
+
           unsaveRecipeFromCurrentUser(
-            `Users/${user.uid}/generatedRecipes/`,
+            collectionPath,
             String(selectedMeal.id),
-            "gptResponse"
+            currentCollection === "generated" ? "gptResponse" : "recipe"
           );
           setSelectedMeal(null);
         }}
@@ -97,18 +110,21 @@ const GeneratedMeals = () => {
         className={`primary-color card-button ${isClicked ? "clicked" : ""}`}
         onClick={() => {
           cartClick();
-          const sanitizedMeal = {
-            cuisine: selectedMeal.cuisine,
-            dishType: selectedMeal.dishType,
-            id: selectedMeal.id,
-            image: selectedMeal.image || "",
-            ingredients: selectedMeal.ingredients,
-            instructions: selectedMeal.instructions,
-            name: selectedMeal.name,
-            servings: selectedMeal.servings,
-            summary: selectedMeal.summary,
-            isSaved: selectedMeal.isSaved,
-          };
+          const sanitizedMeal =
+            currentCollection === "generated"
+              ? {
+                  cuisine: selectedMeal.cuisine,
+                  dishType: selectedMeal.dishType,
+                  id: selectedMeal.id,
+                  image: selectedMeal.image || "",
+                  ingredients: selectedMeal.ingredients,
+                  instructions: selectedMeal.instructions,
+                  name: selectedMeal.name,
+                  servings: selectedMeal.servings,
+                  summary: selectedMeal.summary,
+                  isSaved: selectedMeal.isSaved,
+                }
+              : selectedMeal;
           saveData(
             `Users/${user.uid}/Cart/`,
             String(sanitizedMeal.id),
@@ -142,26 +158,33 @@ const GeneratedMeals = () => {
           saveData={saveData}
         />
       )}
-      {generatedRecipes.length === 0 ? (
+      {recipes.length === 0 ? (
         <EmptyCollectionMessage
-          collectionName="Generated Recipes"
-          href="/recommendations"
+          collectionName={`${
+            currentCollection.charAt(0).toUpperCase() +
+            currentCollection.slice(1)
+          } Recipes`}
+          href={
+            currentCollection === "saved"
+              ? "/search"
+              : currentCollection === "custom"
+              ? "/create-recipe"
+              : "/recommendations"
+          }
         />
       ) : (
-        generatedRecipes.map((recipe, key) => {
-          return (
-            <ListGroupItem
-              action
-              onClick={() => setSelectedMeal(recipe)}
-              key={key}
-            >
-              {recipe.name}
-            </ListGroupItem>
-          );
-        })
+        recipes.map((recipe, key) => (
+          <ListGroupItem
+            action
+            onClick={() => setSelectedMeal(recipe)}
+            key={key}
+          >
+            {recipe.name}
+          </ListGroupItem>
+        ))
       )}
     </ListGroup>
   );
 };
 
-export default GeneratedMeals;
+export default UserDataViewerItems;
