@@ -13,6 +13,7 @@ import RecipeDetails from "../../../components/RecipeDetails.jsx";
 import OpenAI from "openai";
 import FirestoreService from "../../../firebase/FirebaseService";
 import { useAuth } from "../../../utils/AuthContext.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const GeneratedMealCard = ({ recipe }) => {
   const [selectedMeal, setSelectedMeal] = useState(null);
@@ -43,7 +44,26 @@ const GeneratedMealCard = ({ recipe }) => {
         size: "1024x1024",
       });
       setImageURL(response.data[0].url);
-      console.log("Image generated successfully:", response.data[0].url);
+
+
+      // Fetch image through the proxy
+      const imageResponse = await fetch(imageURL);
+      const imageBlob = await imageResponse.blob();
+
+      const storage = getStorage();
+      const storageRef = ref(storage, `images/${recipe.name.replace(/ /g, '_')}.png`);
+
+// Set the metadata
+      const metadata = {
+      contentType: 'image/png',  // Adjust based on the actual image type if necessary
+      };
+
+// Upload the blob with metadata
+await uploadBytes(storageRef, imageBlob, metadata);
+
+const downloadURL = await getDownloadURL(storageRef);
+setFirebaseImgURL(downloadURL);
+console.log("Image generated successfully:", downloadURL);
     } catch (error) {
       console.error("Error generating image:", error);
     }
