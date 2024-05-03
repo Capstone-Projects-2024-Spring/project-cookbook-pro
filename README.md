@@ -111,6 +111,32 @@ Simply enter your tokens and Firebase configurations after the = signs.
 
 Now, run  `npm start` in order to launch the project.
 
+## Feature List
+### Demo 1:
+- Search for Recipes
+- Save Searched Recipes to the user's account
+- Create Custom Recipes
+- Save Custom Recipes to the user's account
+- Manage Orders in Cart
+- Add meals to a planner
+- Generate Recipes from ChatGPT
+- Generate shopping list of ingredients for meals from Cart
+- Email shopping list to the user's email
+
+### Demo 2:
+- Save Generated Recipes to the user's account
+- Generating Nutrition Reports
+- Adding meals to the cart from the planner
+- "Discover" meals in search page
+- Adding orders to the cart from almost every instance of the RecipeDetails component
+- Getting DALL-E Images
+- Tracking inspiration for GPT recommendations
+- Reviewing Order History
+
+## Known bugs at time of final release:
+- Adding meals to a day at 11:00pm will put them into the next day as if at 12:00am
+- Submit button for Custom Recipes falls out of Recipe form container on certain aspect ratios
+
 ## Collaborators
 
 [//]: # " readme: collaborators -start "
